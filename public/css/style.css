@@ -57,7 +57,7 @@ body {
   color: black;
 }
 
-.navbar a { /* navbar links */
+.navbar a, .navbar button { /* navbar links */
   display: flex;
   color: black;
   width: 130px;
@@ -71,7 +71,15 @@ body {
   font-size: 18px;
 }
 
-.navbar a:hover { /* navbar links on hover */
+.navbar button { /* navbar logout button - reset button defaults */
+  background-color: transparent;
+  border: none;
+  outline: none;
+  box-shadow: none;
+
+}
+
+.navbar a:hover, .navbar button:hover { /* navbar links on hover */
   background-color: var(--yellow);
   color: white;
 }
