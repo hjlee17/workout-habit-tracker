@@ -1,0 +1,74 @@
+/* header, .project:not(:last-child) {
+  border-bottom: 1px solid #ccc;
+}
+
+.no-button {
+  background: none;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  color: #1b89bc;
+  text-decoration: none;
+  font-size: 100%;
+}
+
+.no-button:hover {
+  color: #065b83;
+  text-decoration: underline;
+}
+
+.dollar-amount {
+  color: #056605;
+  font-weight: bold;
+  margin-left: -5px;
+} */
+
+:root {
+  --turq: rgb(137, 210, 219);
+  --yellow: rgba(243, 172, 80);
+  --teal: rgb(32, 142, 143);
+  --darkteal: rgb(24, 55, 75);
+  --red: rgb(212, 0, 40);
+
+}
+
+
+.header {
+  padding: 25px;
+  background-color: #333;
+}
+
+
+.navbar { /* navigation bar )*/
+  display: flex;
+  font-size: small;
+  color: black;
+}
+
+.navbar a { /* navbar links */
+  display: flex;
+  color: black;
+  width: 130px;
+  border-radius: 10px;
+  margin: 2px;
+  height: 50px;
+  text-decoration: none;
+  justify-content: center;
+  align-items: center;
+  font-family:'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+  font-size: 18px;
+}
+
+.navbar a:hover { /* navbar links on hover */
+  background-color: var(--yellow);
+  color: white;
+}
+
+.title {
+  display: flex;
+  background: var(--teal);
+  border-radius: 10px;
+  /* top right bottom left; */
+  padding: 15px 0px 15px 15px;
+  color: white;
+}
