@@ -26,11 +26,13 @@ const signupHandler = async (event) => {
           body: JSON.stringify(newUserData),
           headers: { 'Content-Type': 'application/json' },
       });
+
       if (response.ok) {
           // replace with correct endpoint
           document.location.replace('/test');
+          
       } else {
-          // how to do error handling when the user already exists?
+          // can i implement error handling when the user already exists?
           const error_message = await response.text();
           console.error(error_message);
           alert(`Error: ${error_message}\nCheck console for further details.`);
