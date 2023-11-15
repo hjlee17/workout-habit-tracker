@@ -32,14 +32,26 @@
 
 }
 
+body {
+  height: 100%;
+  margin: 0;
+}
 
 .header {
   padding: 25px;
   background-color: #333;
+  height:200px;
 }
 
+.remaining-height {
+  background-color: var(--teal);
+  position: absolute;
+  top:200px; /* header height */
+  bottom: 0;
+  width: 100%;
+}
 
-.navbar { /* navigation bar )*/
+.navbar { /* navigation bar */
   display: flex;
   font-size: small;
   color: black;
@@ -71,4 +83,44 @@
   /* top right bottom left; */
   padding: 15px 0px 15px 15px;
   color: white;
+}
+
+.view {
+  display: flex;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.column {
+  flex: 1;
+  flex-direction: row;
+  border-radius: 10px;
+  margin: 50px;
+  background-color: var(--yellow);
+  padding: 20px;
+  box-sizing: border-box; /* include padding in width calculation */
+}
+
+.view h2 {
+  text-align: center;
+  font-size: 1.75em;
+  margin-bottom: 25px;
+}
+
+.field {
+  border: none;
+  border-radius: 7.5px;
+  padding: 10px;
+  width: 100%; 
+  margin-bottom: 10px;
+}
+
+.button {
+  background-color: var(--red);
+  color: white;
+  border: none;
+  border-radius: 7.5px;
+  padding: 10px;
+  cursor: pointer;
+  width: 100%; 
 }

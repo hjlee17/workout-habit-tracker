@@ -11,35 +11,30 @@
 </head>
 
 <body>
-    <div class="header">
-        <div class="navbar">
-            <!-- conditionally render login or logout links -->
-            <a href="/">Home</a>
-            <a href="/dashboard">Dashboard</a>
-            {{#if logged_in}}
-            <button id="logout">Logout</button>
-            {{else}}
-            <a href="/login">Login</a>
-            {{/if}}
-        </div>
-        <h1 class="title">Tech Blog</h1>
-    </div>
-
     <div>
-        
+        <div class="header">
+            <div class="navbar">
+                <!-- conditionally render login or logout links -->
+                <a href="/">Home</a>
+                <a href="/dashboard">Dashboard</a>
+                {{#if logged_in}}
+                <button id="logout">Logout</button>
+                {{else}}
+                <a href="/login">Login</a>
+                {{/if}}
+            </div>
+            <h1 class="title">Tech Blog</h1>
+        </div>
 
-        </header>
+        <div class="remaining-height">
+            <main>
+            <!-- Render the sub layout -->
+                {{{ body }}}
+            </main>
+        </div>
 
-        <main>
-        <!-- Render the sub layout -->
-            {{{ body }}}
-        </main>
 
-        <footer>
-        
-        </footer>
     </div>
-
     <!-- Render script for logged in users only -->
     {{#if logged_in}}
     <script src="/js/logout.js"></script>
