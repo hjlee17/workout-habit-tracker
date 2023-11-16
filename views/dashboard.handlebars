@@ -1,17 +1,17 @@
 <div class="column" id="create-post">
-
+    <h2 id="new-post-header">Write a New Post</h2>
     <input type="title" class="field" id="new-post-title" placeholder="Post Title"/>
     <textarea type="text" class="field" id="new-post-content" placeholder="Type the content of your post here."></textarea>
-    <button class="button" id="create-btn">Create</button>
+    <button class="button" id="create-btn">Publish</button>
 
 </div>
 
-<div class="view">
+<div>
 
     {{#each posts as |post|}}
         {{> post}}
-        {{!-- {{else}}
-        <h6>there are currently no posts,  write your first one!</h6> --}}
+        {{else}}
+        <h6>there are currently no posts, check back later!</h6>
     {{/each}}
 
 </div>

@@ -6,7 +6,24 @@ const withAuth = require('../utils/auth');
 //-------------------------------------------
 // test routes
 router.get('/test', async (req, res) => {
-    res.render('test-dashboard');
+
+    try {
+        // Find the logged in user based on the session ID
+        const userData = await User.findByPk(req.session.user_id, {
+          attributes: { exclude: ['password'] },
+          include: [{ model: Post }],
+        });
+    
+        const user = userData.get({ plain: true });
+    
+        res.render('dashboard', {
+          ...user,
+          logged_in: req.session.logged_in
+        });
+    } catch (err) {
+        res.status(500).json(err);
+    }
+
 });
   
 
@@ -35,33 +52,23 @@ router.get('/', async (req, res) => {
 });
 
 
-
-// GET all posts by a specific user to render to user's dashboard
 router.get('/dashboard', withAuth, async (req, res) => {
     try {
-        const postData = await Post.findAll({
-            where: {
-                user_id: req.session.user_id,
-            },
-            include: [
-                {
-                    model: User,
-                    attributes: ['first_name'],
-                },
-            ],
+        // Find the logged in user based on the session ID
+        const userData = await User.findByPk(req.session.user_id, {
+            include: [{ model: Post }],
         });
+        console.log(`userData: ${userData}`)
 
-
-        const posts = postData.map((post) => post.get({ plain: true }));
-        console.log(posts)
-
-        res.render('test-dash', {
-            posts,
+        const user = userData.get({ plain: true });
+        console.log('user:', user)
+    
+        res.render('dashboard', {
+            ...user,
             logged_in: req.session.logged_in
         });
-
-    } catch (error) {
-        res.status(500).json(error);
+    } catch (err) {
+        res.status(500).json(err);
     }
 });
 
@@ -85,7 +92,6 @@ router.get('/posts/:id', async (req, res) => {
 
 
 //-------------------------------------------
-
 
 
 
