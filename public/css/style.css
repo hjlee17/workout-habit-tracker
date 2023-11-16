@@ -35,20 +35,13 @@
 body {
   height: 100%;
   margin: 0;
+  background-color: var(--teal)
 }
 
 .header {
   padding: 25px;
   background-color: #333;
   height:200px;
-}
-
-.remaining-height {
-  background-color: var(--teal);
-  position: absolute;
-  top:200px; /* header height */
-  bottom: 0;
-  width: 100%;
 }
 
 .navbar { /* navigation bar */
@@ -131,4 +124,48 @@ body {
   padding: 10px;
   cursor: pointer;
   width: 100%; 
+}
+
+.post-partial {
+  display: flex;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.post-container {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  /* top right bottom left; */
+  margin: 30px 30px 0px 30px;
+}
+
+.post-header {
+  background-color: var(--darkteal);
+  border-radius: 10px 10px 0 0;
+}
+
+.post-header h2, .post-header a {
+  /* top right bottom left; */
+  margin: 10px 0px 0px 10px;
+  color: white;
+  text-align: left;
+}
+
+.tagline {
+  color: var(--yellow);
+  /* top right bottom left; */
+  margin: 5px 0px 10px 20px;
+  text-align: left;
+  font-size: .75em;
+  
+}
+
+.post-body {
+  background-color: white;
+  color: black;
+}
+
+.post-body p {
+  margin: 5px 0px 10px 20px;
 }

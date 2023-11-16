@@ -1,0 +1,20 @@
+<div class="post-partial">
+    <div class="post-container">
+
+
+        <div class="post-header">
+        {{!-- title should link to single post --}}
+        <h2><a>{{title}}</a></h2>
+        <p class="tagline">By {{user.first_name}} on {{format_date date_created}}</p>
+        </div>
+
+        <div class="post-body">
+            <p>{{content}}</p>
+        </div>
+
+    </div>
+    
+</div>
+
+{{!-- use with format_date helper --}}
+{{!-- {{format_date date_created}} --}}
