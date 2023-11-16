@@ -1,8 +1,17 @@
-<div>
-    <h2>dashboard</h2>
-    <div>
-        <p>this should be the endpoint for / when a user is logged in</p>
-        <p>this should NOT show if user is not logged in</p>
-        <p>should see logout button in navbar</p>
-    </div>
+<div class="column" id="create-post">
+
+    <input type="title" class="field" id="new-post-title" placeholder="Post Title"/>
+    <textarea type="text" class="field" id="new-post-content" placeholder="Type the content of your post here."></textarea>
+    <button class="button" id="create-btn">Create</button>
+
+</div>
+
+<div class="view">
+
+    {{#each posts as |post|}}
+        {{> post}}
+        {{!-- {{else}}
+        <h6>there are currently no posts,  write your first one!</h6> --}}
+    {{/each}}
+
 </div>
