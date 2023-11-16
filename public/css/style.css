@@ -32,6 +32,8 @@
 
 }
 
+
+/* main layout */
 body {
   height: 100%;
   margin: 0;
@@ -77,6 +79,7 @@ body {
   color: white;
 }
 
+
 .title {
   display: flex;
   background: var(--teal);
@@ -86,12 +89,22 @@ body {
   color: white;
 }
 
+
+/* optional wrapper for body layouts */
 .view {
   display: flex;
   min-width: 100%;
   max-width: 100%;
 }
 
+.view h2 {
+  text-align: center;
+  font-size: 1.75em;
+  margin-bottom: 25px;
+}
+
+
+/* login/signup page */
 .column {
   flex: 1;
   flex-direction: row;
@@ -102,11 +115,6 @@ body {
   box-sizing: border-box; /* include padding in width calculation */
 }
 
-.view h2 {
-  text-align: center;
-  font-size: 1.75em;
-  margin-bottom: 25px;
-}
 
 .field {
   border: none;
@@ -126,6 +134,8 @@ body {
   width: 100%; 
 }
 
+
+/* post styling */
 .post-partial {
   display: flex;
   min-width: 100%;
@@ -168,4 +178,11 @@ body {
 
 .post-body p {
   margin: 5px 0px 10px 20px;
+}
+
+
+
+#new-post-content {
+  height: 200px; 
+  text-align: top; 
 }
