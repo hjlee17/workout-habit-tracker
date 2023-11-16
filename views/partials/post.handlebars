@@ -1,6 +1,6 @@
 <div class="post-partial">
-    <div class="post-container">
 
+    <div class="post-container">
 
         <div class="post-header">
         {{!-- title should link to single post --}}
@@ -12,9 +12,12 @@
             <p>{{content}}</p>
         </div>
 
+        {{#if logged_in}}
+        <div>
+            <button id="edit-post">Edit Post</button>
+        </div>
+        {{/if}}
+
     </div>
     
 </div>
-
-{{!-- use with format_date helper --}}
-{{!-- {{format_date date_created}} --}}
