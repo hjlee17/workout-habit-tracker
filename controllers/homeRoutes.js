@@ -1,27 +1,17 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
 const { User, Post } = require('../models');
-// const withAuth = require('../utils/auth');
+const withAuth = require('../utils/auth');
 
 //-------------------------------------------
 // test routes
 router.get('/test', async (req, res) => {
-    res.render('test');
+    res.render('test-dashboard');
 });
   
 
-router.get('/test-alreadyLoggedIn', async (req, res) => {
-    res.render('test-alreadyLoggedIn');
-});
-
-
-router.get('/test-loggedIn', async (req, res) => {
-    res.render('test-loggedIn');
-});
-
-
-// GET all posts - in development - testing for handlebars
-router.get('/posts', async (req, res) => {
+// GET all posts (by all users) to render to homepage
+router.get('/', async (req, res) => {
     try {
         const postData = await Post.findAll({
             include: [
@@ -34,15 +24,48 @@ router.get('/posts', async (req, res) => {
 
         const posts = postData.map((post) => post.get({ plain: true }));
 
-        res.render('post', {
+        res.render('homepage', {
             posts,
-            // logged_in: req.session.logged_in
+            logged_in: req.session.logged_in
         });
 
     } catch (error) {
-        res.status(500).json(err);
+        res.status(500).json(error);
     }
 });
+
+
+
+// GET all posts by a specific user to render to user's dashboard
+router.get('/dashboard', withAuth, async (req, res) => {
+    try {
+        const postData = await Post.findAll({
+            where: {
+                user_id: req.session.user_id,
+            },
+            include: [
+                {
+                    model: User,
+                    attributes: ['first_name'],
+                },
+            ],
+        });
+
+
+        const posts = postData.map((post) => post.get({ plain: true }));
+        console.log(posts)
+
+        res.render('test-dash', {
+            posts,
+            logged_in: req.session.logged_in
+        });
+
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
+
 
 
 // GET one post 
@@ -63,21 +86,6 @@ router.get('/posts/:id', async (req, res) => {
 
 //-------------------------------------------
 
-
-
-
-
-
-// landing page when logged in vs. not logged in
-router.get('/', async (req, res) => {
-    if (req.session.logged_in) {
-        res.render('test-dashboard', { 
-            logged_in: true 
-        });
-    } else {
-        res.render('test-public-homepage'); 
-    }
-});
 
 
 
