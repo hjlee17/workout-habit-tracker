@@ -21,7 +21,7 @@ const app = express();
 const PORT = process.env.PORT || 3001; 
 
 // create instance of handlebars (using helpers)
-const hbs = exphbs.create();
+const hbs = exphbs.create( {helpers} );
 
 
 const sess = {
