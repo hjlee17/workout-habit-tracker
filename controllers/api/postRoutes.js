@@ -31,10 +31,13 @@ router.delete('/:id', async (req, res) => {
 });
 
 
+// ------------------------------------------------------------------
+
+
 // CREATE a post 
-router.post('/', async (req, res) => {
-  const newPost = await Post.create(req.body);
-  /* req.body should look like this...
+router.post('/create', withAuth, async (req, res) => {
+
+    /* req.body should look like this...
     {
       "title": "first post",
       "date_created": "11-15-2023",
@@ -42,11 +45,25 @@ router.post('/', async (req, res) => {
       "user_id": 4
     }
   */
-  res.json(newPost);
+
+  try {
+    const newPostData = await {
+      ...req.body,
+      user_id: req.session.user_id,
+    } 
+    
+    const newPost = await Post.create(newPostData);
+
+
+    // send new post as a res
+    res.json(newPost);
+
+  } catch (error) {
+    res.status(400).json(error);
+  }
 });
 
 
-// ------------------------------------------------------------------
 
 
 // UPDATE post
