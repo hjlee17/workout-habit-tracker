@@ -5,26 +5,14 @@ const withAuth = require('../utils/auth');
 
 //-------------------------------------------
 // test routes
+// router.get('/test', async (req, res) => {
+
 router.get('/test', async (req, res) => {
-
-    try {
-        // Find the logged in user based on the session ID
-        const userData = await User.findByPk(req.session.user_id, {
-          attributes: { exclude: ['password'] },
-          include: [{ model: Post }],
-        });
-    
-        const user = userData.get({ plain: true });
-    
-        res.render('dashboard', {
-          ...user,
-          logged_in: req.session.logged_in
-        });
-    } catch (err) {
-        res.status(500).json(err);
-    }
-
-});
+    res.render('single-post');
+})
+  
+  
+//-------------------------------------------
   
 
 // GET all posts (by all users) to render to homepage
@@ -40,7 +28,9 @@ router.get('/', async (req, res) => {
         });
 
         const posts = postData.map((post) => post.get({ plain: true }));
+        console.log('posts:', posts)
 
+      
         res.render('homepage', {
             posts,
             logged_in: req.session.logged_in
@@ -52,46 +42,69 @@ router.get('/', async (req, res) => {
 });
 
 
+// GET all posts (by logged in user) to render to dashboard
 router.get('/dashboard', withAuth, async (req, res) => {
+    console.log('req:', req.session.user_id)
     try {
-        // Find the logged in user based on the session ID
-        const userData = await User.findByPk(req.session.user_id, {
-            include: [{ model: Post }],
+        const postData = await Post.findAll({
+            where: {
+                user_id: req.session.user_id
+            },
+            include: [
+                {
+                  model: User,
+                  attributes: ['first_name'],
+                },
+            ],
         });
-        console.log(`userData: ${userData}`)
 
-        const user = userData.get({ plain: true });
-        console.log('user:', user)
-    
+        const posts = postData.map((post) => post.get({ plain: true }));
+        console.log('posts:', posts)
+
+      
         res.render('dashboard', {
-            ...user,
+            posts,
             logged_in: req.session.logged_in
         });
-    } catch (err) {
-        res.status(500).json(err);
+
+    } catch (error) {
+        res.status(500).json(error);
     }
 });
 
 
-
-
-// GET one post 
-router.get('/posts/:id', async (req, res) => {
+// GET one post to render to single-posts layout
+router.get('/posts/:id', withAuth, async (req, res) => {
+    console.log('req:', req.session.user_id)
+    console.log('flag:', req.session.logged_in)
+    console.log('post_id:', req.params.id)
     try{ 
-        const postData = await Post.findByPk(req.params.id);
+        const postData = await Post.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User,
+                    attributes: ['first_name'],
+                },
+            ],
+        });
+
         if(!postData) {
             res.status(404).json({message: 'No post exists with this id!'});
             return;
         }
+
         const post = postData.get({ plain: true });
-        res.render('single-post', post);
-      } catch (err) {
-          res.status(500).json(err);
-      };     
-  });
+        console.log('post:', post)
+
+        res.render('single-post', { post, loggedIn: req.session.loggedIn });
+
+    } catch (error) {
+          res.status(500).json(error);
+    };     
+});
 
 
-//-------------------------------------------
+
 
 
 
@@ -100,7 +113,7 @@ router.get('/login', async (req, res) => {
 
     // if the user is already logged in, redirect the request to another route
     if (req.session.logged_in) {
-        res.redirect('/');
+        res.redirect('/dashboard');
         return;
     }
 
