@@ -17,7 +17,6 @@ class Post extends Model {}
       },
       date_created: {
         type: DataTypes.DATE,
-        allowNull: false,
         defaultValue: DataTypes.NOW,
       },
       content: {
@@ -42,5 +41,5 @@ class Post extends Model {}
     }
   );
   
-  module.exports = Post;
+module.exports = Post;
   
