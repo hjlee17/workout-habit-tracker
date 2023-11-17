@@ -1,0 +1,28 @@
+{{!-- first post references the partial
+second post passes the "post" variable from the get request through the partial --}}
+
+{{> post post}}
+
+
+<p>comments will appear here</p>
+
+
+<div class="column" id="create-comment">
+    <h2 id="new-post-header">Leave a comment:</h2>
+    <textarea type="text" class="field" id="new-comment-content" placeholder="Type your comment here."></textarea>
+    <button class="button" id="comment-btn">Comment</button>
+</div>
+
+
+
+
+
+
+
+{{!-- {{/if}} --}}
+
+{{!-- {{> comments post.comments}}
+
+{{#if loggedIn}}
+<script src="/javascript/comment.js"></script>
+{{/if}} --}}
