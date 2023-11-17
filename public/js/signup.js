@@ -29,7 +29,7 @@ const signupHandler = async (event) => {
 
       if (response.ok) {
           // replace with correct endpoint
-          document.location.replace('/test');
+          document.location.replace('/dashboard');
           
       } else {
           // can i implement error handling when the user already exists?
