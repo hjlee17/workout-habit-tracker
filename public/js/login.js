@@ -23,8 +23,7 @@ const loginHandler = async (event) => {
             console.log(response)
 
             if (response.ok) {
-                // replace with correct endpoint
-                document.location.replace('/');
+                document.location.replace('/dashboard');
 
             } else {
                 const error_message = await response.text();
