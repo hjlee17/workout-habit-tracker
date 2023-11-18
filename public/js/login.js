@@ -37,15 +37,6 @@ const loginHandler = async (event) => {
     }
 };
 
-
-
-
-
-// for testing
-const buttonTest = async (event) => {
-    event.preventDefault();
-    document.location.replace('/test');
-}
   
 // event handler for the login button
 $('#login-btn').click(function(event) {

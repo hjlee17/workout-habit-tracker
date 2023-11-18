@@ -36,20 +36,12 @@ const newCommentHandler = async (event) => {
     }   
 }
 
-
-// for testing
-const buttonTest = async (event) => {
-    event.preventDefault();
-    document.location.replace('/test');
-}
-
- 
 // event handler for the login button
 $('#comment-btn').click(function(event) {
     newCommentHandler(event);
 });
   
-  // event handler for enter key on the last input field
+// event handler for enter key on the last input field
 $('#new-comment-content').on('keyup', function(event) {
     if (event.key === 'Enter') {
         newCommentHandler(event);

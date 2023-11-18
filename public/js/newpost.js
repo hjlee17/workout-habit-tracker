@@ -36,13 +36,6 @@ const newPostHandler = async (event) => {
 }
 
 
-
-// for testing
-const buttonTest = async (event) => {
-    event.preventDefault();
-    document.location.replace('/test');
-}
-  
 // event handler for the login button
 $('#create-btn').click(function(event) {
     newPostHandler(event);
