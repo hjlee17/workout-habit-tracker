@@ -1,35 +1,9 @@
-/* header, .project:not(:last-child) {
-  border-bottom: 1px solid #ccc;
-}
-
-.no-button {
-  background: none;
-  border: none;
-  padding: 0;
-  cursor: pointer;
-  color: #1b89bc;
-  text-decoration: none;
-  font-size: 100%;
-}
-
-.no-button:hover {
-  color: #065b83;
-  text-decoration: underline;
-}
-
-.dollar-amount {
-  color: #056605;
-  font-weight: bold;
-  margin-left: -5px;
-} */
-
 :root {
   --turq: rgb(137, 210, 219);
   --yellow: rgba(243, 172, 80);
   --teal: rgb(32, 142, 143);
   --darkteal: rgb(24, 55, 75);
   --red: rgb(212, 0, 40);
-
 }
 
 
@@ -160,6 +134,7 @@ body {
   margin: 10px 0px 0px 10px;
   color: white;
   text-align: left;
+  font-size: 1.25em;
 }
 
 .tagline {
@@ -168,21 +143,86 @@ body {
   margin: 5px 0px 10px 20px;
   text-align: left;
   font-size: .75em;
-  
 }
 
 .post-body {
   background-color: white;
   color: black;
+  min-height: 150px;
 }
 
 .post-body p {
   margin: 5px 0px 10px 20px;
 }
 
-
+#new-post-header {
+  text-align: center;
+}
 
 #new-post-content {
   height: 200px; 
   text-align: top; 
+}
+
+#no-posts p {
+  font-style: italic;
+  font-size: 1.25em;
+  text-align: center;
+  margin-top: 20px;
+}
+
+
+/* comment styling */
+.comment-partial {
+  display: flex;
+  flex-direction: column;
+  min-width: 100%;
+  max-width: 100%;
+}
+
+.comment-container {
+  display: flex;
+  flex-direction: column;
+  /* top right bottom left; */
+  margin: 30px 30px 0px 30px;
+  border-radius: 10px;
+  /* border-width: 1px;
+  border-color: black;
+  border-style: solid; */
+}
+
+.comment-footer {
+  border-radius: 0 0 10px 10px ;
+  background-color: rgb(24, 55, 75, .5);
+}
+
+.comment-tagline {
+  color: white;
+  /* top right bottom left; */
+  margin: 5px 0px 10px 20px;
+  text-align: left;
+  font-size: .75em;
+  
+}
+
+.comment-body {
+  border-radius: 10px 10px 0 0;
+  border-bottom-style: solid;
+  border-bottom-color: var(--yellow);
+  background-color: var(--turq);
+  color: black;
+  min-height: 75px;
+}
+
+.comment-body p {
+  margin: 5px 0px 10px 20px;
+  font-style: italic;
+  font-size: 1em;
+}
+
+#no-comments p {
+  font-style: italic;
+  font-size: 1.25em;
+  text-align: center;
+  margin-top: 20px;
 }
