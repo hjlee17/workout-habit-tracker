@@ -3,21 +3,33 @@
     <div class="post-container">
 
         <div class="post-header">
-        {{!-- title should link to single post --}}
-        <h2><a href="/posts/{{id}}">{{title}}</a></h2>
-        <p class="tagline">By {{user.first_name}} on {{format_date date_created}}</p>
+
+            <div class="header-left">
+                <h2><a href="/posts/{{id}}">{{title}}</a></h2>
+                <p class="tagline">By {{user.first_name}} on {{format_date date_created}}</p>
+            </div>
+
+            {{!-- these buttons are only rendered if a "user_logged_in" flag is passed in --}}
+            <div class="header-right">
+                {{#if user_logged_in}}
+                    <a href="/posts/{{id}}/edit" id="edit-post">Edit Post</a>
+                    <button id="delete-post-btn">Delete Post</button>
+                {{/if}}
+            </div>
+
         </div>
 
         <div class="post-body">
             <p>{{content}}</p>
         </div>
 
-        {{#if logged_in}}
-        <div>
-            <button id="edit-post">Edit Post</button>
+        <div class="post-footer">
+        <a href="/posts/{{id}}">{{comments.length}} comments</a>
         </div>
-        {{/if}}
 
     </div>
     
 </div>
+
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="/js/editpost.js"></script>
