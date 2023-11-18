@@ -152,7 +152,7 @@ body {
   align-items: center;
 }
 
-#edit-post {
+#update-post {
   margin-bottom: 10px;
   border-style: outset;
   border-radius: 10px;
@@ -222,11 +222,11 @@ body {
   text-align: top; 
 }
 
-#edit-post-header {
+#update-post-header {
   text-align: center;
 }
 
-#edit-post-content {
+#update-post-content {
   height: 200px; 
   text-align: top; 
 }

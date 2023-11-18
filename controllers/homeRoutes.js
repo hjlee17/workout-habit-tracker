@@ -149,8 +149,8 @@ router.get('/posts/:id', withAuth, async (req, res) => {
 });
 
 
-// GET one post to edit
-router.get('/posts/:id/edit', withAuth, async (req, res) => {
+// GET one post to update
+router.get('/posts/:id/update', withAuth, async (req, res) => {
     console.log('req:', req.session.user_id)
     console.log('flag:', req.session.logged_in)
     console.log('req.params.id', req.params.id)
@@ -192,9 +192,9 @@ router.get('/posts/:id/edit', withAuth, async (req, res) => {
         }
 
         post.logged_in = req.session.logged_in;
-        console.log('editpost:', post)
+        console.log('updatepost:', post)
 
-        res.render('edit-post', { 
+        res.render('update-post', { 
             post, 
             logged_in: req.session.logged_in
         });

@@ -12,7 +12,7 @@
             {{!-- these buttons are only rendered if a "user_logged_in" flag is passed in --}}
             <div class="header-right">
                 {{#if user_logged_in}}
-                    <a href="/posts/{{id}}/edit" id="edit-post">Edit Post</a>
+                    <a href="/posts/{{id}}/update" id="update-post">Edit Post</a>
                     <button id="delete-post-btn">Delete Post</button>
                 {{/if}}
             </div>
@@ -30,6 +30,3 @@
     </div>
     
 </div>
-
-<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
-<script src="/js/editpost.js"></script>
