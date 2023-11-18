@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
 const { Post, User, Comment } = require('../../models');
-const withAuth = require('../../utils/auth');
+const { withAuth } = require('../../utils/auth');
 
 // the /api/posts endpoint
 
@@ -59,7 +59,7 @@ router.post('/create', withAuth, async (req, res) => {
     res.json(newPost);
 
   } catch (error) {
-    res.status(400).json(error);
+    res.status(500).json(error);
   }
 });
 
@@ -67,8 +67,42 @@ router.post('/create', withAuth, async (req, res) => {
 
 
 // UPDATE post
+router.put('/update/:id', withAuth, async (req, res) => {
+  console.log("api test'")
+  console.log(req.params.id)
+  /* req.body should look like this...
+  {
+    "title": "first post",
+    "content": "this is the content of my first post. here is a second sentence.",
+  }
+*/
 
+try {
+  const updatedPost = await Post.update(
+    {
+      title: req.body.title,
+      content: req.body.content
+    }, 
+    {
+      where: {
+        id: req.params.id
+      }
+    }, 
+  );
 
+  // error handling
+  if(!updatedPost) {
+    res.status(404).json({message: 'No post exists with this id!'});
+    return;
+  }
+
+  // send updated post as a res
+  res.json(updatedPost);
+  
+} catch (error) {
+  res.status(500).json(error);
+}
+});
 
 
 
