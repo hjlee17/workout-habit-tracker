@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
-const { User, Post } = require('../models');
+const { User, Post, Comment } = require('../models');
 const withAuth = require('../utils/auth');
 
 //-------------------------------------------
@@ -10,8 +10,7 @@ const withAuth = require('../utils/auth');
 router.get('/test', async (req, res) => {
     res.render('single-post');
 })
-  
-  
+
 //-------------------------------------------
   
 
@@ -56,6 +55,8 @@ router.get('/dashboard', withAuth, async (req, res) => {
                   attributes: ['first_name'],
                 },
             ],
+            // render posts in reverse chronological order
+            order: [['date_created', 'DESC']],
         });
 
         const posts = postData.map((post) => post.get({ plain: true }));
@@ -85,7 +86,17 @@ router.get('/posts/:id', withAuth, async (req, res) => {
                     model: User,
                     attributes: ['first_name'],
                 },
+                {
+                    model: Comment,
+                    include: { 
+                        model: User,
+                        attributes: ['first_name']
+                    },
+                    attributes: ['date_created', 'content', 'user_id'],
+                },
             ],
+            // render posts in reverse chronological order
+            order: [['date_created', 'DESC']],
         });
 
         if(!postData) {
@@ -96,15 +107,16 @@ router.get('/posts/:id', withAuth, async (req, res) => {
         const post = postData.get({ plain: true });
         console.log('post:', post)
 
-        res.render('single-post', { post, loggedIn: req.session.loggedIn });
+        res.render('single-post', { 
+            post, 
+            logged_in: req.session.logged_in
+        });
 
     } catch (error) {
           res.status(500).json(error);
+          console.log(error);
     };     
 });
-
-
-
 
 
 

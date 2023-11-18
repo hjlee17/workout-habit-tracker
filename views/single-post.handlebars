@@ -1,10 +1,15 @@
 {{!-- first post references the partial
-second post passes the "post" variable from the get request through the partial --}}
+second post passes the "post" data from the get request through the partial --}}
 
 {{> post post}}
 
 
-<p>comments will appear here</p>
+    {{!-- {{#each post.comments as |comment|}} --}}
+    {{#each post.comments as |comment|}}
+        {{> comment}}
+        {{else}}
+        <div id="no-comments"><p>there are currently no comments, leave the first one!</p></div>
+    {{/each}}
 
 
 <div class="column" id="create-comment">
@@ -17,12 +22,5 @@ second post passes the "post" variable from the get request through the partial 
 
 
 
-
-
-{{!-- {{/if}} --}}
-
-{{!-- {{> comments post.comments}}
-
-{{#if loggedIn}}
-<script src="/javascript/comment.js"></script>
-{{/if}} --}}
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+<script src="/js/comment.js"></script>
