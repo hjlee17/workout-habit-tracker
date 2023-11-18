@@ -1,14 +1,14 @@
 const router = require('express').Router();
 const sequelize = require('../config/connection');
 const { User, Post, Comment } = require('../models');
-const withAuth = require('../utils/auth');
+const { withAuth } = require('../utils/auth');
 
 //-------------------------------------------
 // test routes
 // router.get('/test', async (req, res) => {
 
 router.get('/test', async (req, res) => {
-    res.render('single-post');
+    res.render('test');
 })
 
 //-------------------------------------------
@@ -20,18 +20,30 @@ router.get('/', async (req, res) => {
         const postData = await Post.findAll({
             include: [
                 {
-                  model: User,
-                  attributes: ['first_name'],
+                    model: User,
+                    attributes: ['first_name'],
+                },
+                {
+                    model: Comment,
                 },
             ],
+            // render posts in reverse chronological order
+            order: [['date_created', 'DESC']],
         });
 
-        const posts = postData.map((post) => post.get({ plain: true }));
-        console.log('posts:', posts)
 
-      
+        // add a "user_logged_in" flag to each post belong to logged in user
+        // in the posts array for the post partial layout
+        // by using the session user_id and comparing it to the post's user_id
+        const posts = postData.map((post) => {
+            const onePost = post.get({ plain: true });
+            onePost.user_logged_in = req.session.user_id === post.user_id;
+            return onePost;
+        });
+
         res.render('homepage', {
             posts,
+            // "logged_in" flag passed to use in main
             logged_in: req.session.logged_in
         });
 
@@ -54,17 +66,30 @@ router.get('/dashboard', withAuth, async (req, res) => {
                   model: User,
                   attributes: ['first_name'],
                 },
+                {
+                    model: Comment,
+                },
             ],
             // render posts in reverse chronological order
             order: [['date_created', 'DESC']],
         });
 
-        const posts = postData.map((post) => post.get({ plain: true }));
+        // add a "user_logged_in" flag to each post in the posts array for the post partial layout
+        const posts = postData.map((post) => {
+            const onePost = post.get({ plain: true });
+            // "req.session.user_id === post.user_id"
+            // i don't need to do this comparison for the homepage because... 
+            // i've only retrieved posts belonging to the user 
+            onePost.user_logged_in = true;
+            return onePost;
+        });
+
         console.log('posts:', posts)
 
       
         res.render('dashboard', {
             posts,
+            // "logged_in" flag passed to use in main
             logged_in: req.session.logged_in
         });
 
@@ -95,6 +120,56 @@ router.get('/posts/:id', withAuth, async (req, res) => {
                     attributes: ['date_created', 'content', 'user_id'],
                 },
             ],
+        });
+
+        // error handling
+        if(!postData) {
+            res.status(404).json({message: 'No post exists with this id!'});
+            return;
+        }
+
+        const post = postData.get({ plain: true });
+        // user_logged_in flag added to post array for post partial layout
+        post.user_logged_in = req.session.user_id === post.user_id;
+        console.log('post:', post)
+
+     
+        res.render('single-post', { 
+            post, 
+            // "logged_in" flag passed to use in main
+            logged_in: req.session.logged_in,
+            // "user_logged_in" passed to use in post partial
+            user_logged_in: req.session.user_id === post.user_id
+        });
+
+    } catch (error) {
+          res.status(500).json(error);
+          console.log(error);
+    };     
+});
+
+
+// GET one post to edit
+router.get('/posts/:id/edit', withAuth, async (req, res) => {
+    console.log('req:', req.session.user_id)
+    console.log('flag:', req.session.logged_in)
+    console.log('req.params.id', req.params.id)
+    try{ 
+        const postData = await Post.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User,
+                    attributes: ['first_name'],
+                },
+                {
+                    model: Comment,
+                    include: { 
+                        model: User,
+                        attributes: ['first_name']
+                    },
+                    attributes: ['date_created', 'content', 'user_id'],
+                },
+            ],
             // render posts in reverse chronological order
             order: [['date_created', 'DESC']],
         });
@@ -103,11 +178,23 @@ router.get('/posts/:id', withAuth, async (req, res) => {
             res.status(404).json({message: 'No post exists with this id!'});
             return;
         }
-
+   
         const post = postData.get({ plain: true });
-        console.log('post:', post)
 
-        res.render('single-post', { 
+        // compare the req.session.user_id and the user_id (part of the Post model)
+        // and then if they DONT match, stop the code and redirect
+        // res.render('test');
+
+        // check logged in user and owner of post
+        if (req.session.user_id !== post.user_id) {
+            res.redirect('/test'); 
+            return;
+        }
+
+        post.logged_in = req.session.logged_in;
+        console.log('editpost:', post)
+
+        res.render('edit-post', { 
             post, 
             logged_in: req.session.logged_in
         });
@@ -117,6 +204,8 @@ router.get('/posts/:id', withAuth, async (req, res) => {
           console.log(error);
     };     
 });
+
+
 
 
 
