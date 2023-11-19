@@ -4,7 +4,7 @@ var colors = require('colors');
 colors.enable();
 
 const seedComments = async () => {
-    // run postUsers for access to key-value pairs (originally created in userData.js)
+    // run seedPosts for access to key-value pairs (originally created in userData.js)
     const userMap = await seedPosts();
     console.log('\n----- Posts seeded, moving onto Comments... -----\n'.yellow);
 
