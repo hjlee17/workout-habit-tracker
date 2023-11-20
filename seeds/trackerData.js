@@ -13,8 +13,8 @@ const seedTrackers = async () => {
             tile_id: 2
         },
         {
-            tracker_goal: 200000,
-            current_tracker_status: 50000,
+            tracker_goal: 200,
+            current_tracker_status: 500,
             tile_id: 3  
         },
         {
