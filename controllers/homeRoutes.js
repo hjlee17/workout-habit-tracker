@@ -88,7 +88,7 @@ router.get('/dashboard', withAuth, async (req, res) => {
 
       
         res.render('dashboard', {
-            posts,
+            posts, // user_logged_in flag attached to posts (for use in post partial)
             // "logged_in" flag passed to use in main
             logged_in: req.session.logged_in
         });
@@ -104,42 +104,63 @@ router.get('/posts/:id', withAuth, async (req, res) => {
     console.log('req:', req.session.user_id)
     console.log('flag:', req.session.logged_in)
     console.log('post_id:', req.params.id)
-    try{ 
-        const postData = await Post.findByPk(req.params.id, {
-            include: [
-                {
-                    model: User,
-                    attributes: ['first_name'],
-                },
-                {
-                    model: Comment,
-                    include: { 
-                        model: User,
-                        attributes: ['first_name']
-                    },
-                    attributes: ['date_created', 'content', 'user_id'],
-                },
-            ],
-        });
 
+    try{ 
+        const [postData, commentData] = await Promise.all([
+            
+            Post.findByPk(req.params.id, {
+                include: [
+                    {
+                        model: User,
+                        attributes: ['first_name'],
+                    },
+                ],
+            }),
+
+            Comment.findAll({
+                where: {
+                    post_id: req.params.id,
+                },
+                include: [
+                    {
+                        model: User,
+                        attributes: ['first_name'],
+                    },
+                ],
+                attributes: ['id', 'date_created', 'content', 'user_id', 'post_id'],
+            }),
+
+        ])
+        
         // error handling
         if(!postData) {
             res.status(404).json({message: 'No post exists with this id!'});
             return;
         }
 
+        const loggedInUser = req.session.user_id;
+
         const post = postData.get({ plain: true });
         // user_logged_in flag added to post array for post partial layout
-        post.user_logged_in = req.session.user_id === post.user_id;
+        post.user_logged_in = loggedInUser === post.user_id;
         console.log('post:', post)
 
-     
+
+        const comments = commentData.map(comment => {
+            const oneComment = comment.get({ plain: true });
+            // add the 'user_logged_in' flag to each comment
+            // user_logged_in flag should be added also if the post_id = logged in user
+            oneComment.user_logged_in = loggedInUser === oneComment.user_id || loggedInUser === post.user_id;
+            return oneComment;
+        });
+        console.log('comments:', comments)
+        
+    
         res.render('single-post', { 
-            post, 
+            post, // user_logged_in flag attached to post (for use in post partial) 
+            comments, // user_logged_in flag attached to comments (for use in comment partial) 
             // "logged_in" flag passed to use in main
             logged_in: req.session.logged_in,
-            // "user_logged_in" passed to use in post partial
-            user_logged_in: req.session.user_id === post.user_id
         });
 
     } catch (error) {
@@ -147,6 +168,7 @@ router.get('/posts/:id', withAuth, async (req, res) => {
           console.log(error);
     };     
 });
+
 
 
 // GET one post to update

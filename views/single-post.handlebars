@@ -4,12 +4,12 @@ second post passes the "post" data from the get request through the partial --}}
 {{> post post}}
 
 
-    {{!-- {{#each post.comments as |comment|}} --}}
-    {{#each post.comments as |comment|}}
-        {{> comment}}
-        {{else}}
-        <div id="no-comments"><p>there are currently no comments, leave the first one!</p></div>
-    {{/each}}
+{{!-- {{#each post.comments as |comment|}} --}}
+{{#each comments as |comment|}}
+    {{> comment}}
+    {{else}}
+    <h6>there are currently no comments, leave the first one!</h6>
+{{/each}}
 
 
 <div class="column" id="create-comment">
@@ -20,7 +20,6 @@ second post passes the "post" data from the get request through the partial --}}
 
 
 
-
-
 <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 <script src="/js/comment.js"></script>
+<script src="/js/deletecomment.js"></script>

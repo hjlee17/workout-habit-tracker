@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const sequelize = require('../../config/connection');
 const { Post, User, Comment } = require('../../models');
-const withAuth = require('../../utils/auth');
+const { withAuth } = require('../../utils/auth');
 
 // the /api/comments endpoint
 
@@ -34,10 +34,10 @@ router.delete('/:id', async (req, res) => {
 // ------------------------------------------------------------------
 
 
+
 // CREATE a comment 
 router.post('/create', withAuth, async (req, res) => {
-
-    /* req.body should look like this...
+  /* req.body should look like this...
     {
       "date_created": "11-15-2023",
       "content": "this is a comment.",
@@ -45,13 +45,13 @@ router.post('/create', withAuth, async (req, res) => {
       "post_id": 4
     }
   */
+
   console.log('req.body:', req.body)
-  // console.log('post_id:', req.params.id)
   console.log('user_id:', req.session.user_id,)
+
   try {
     const newCommentData = await {
       ...req.body,
-      // post_id: req.body.post_id,
       user_id: req.session.user_id,
     } 
     
@@ -67,18 +67,36 @@ router.post('/create', withAuth, async (req, res) => {
 
 
 
+// DELETE a comment
+router.delete('/:id', withAuth, async (req, res) => {
+  /* req.body should look like this...
+    {
+      "id": 4
+    }
+  */
 
-// UPDATE post
+  try {
+    const deletedComment = await Comment.destroy(
+      {
+        where: {
+          id: req.body.id
+        }
+      }, 
+    );
 
+    // error handling
+    if(!deletedComment) {
+      res.status(404).json({message: 'No comment exists with this id!'});
+      return;
+    }
 
-
-
-
-// DELETE post
-
-
-
-
+    // send updated post as a res
+    res.json(deletedComment);
+    
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 
 
 module.exports = router;
