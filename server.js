@@ -3,6 +3,7 @@ const path = require('path'); // node module for paths
 
 // custom imports
 const routes = require('./controllers'); // controllers folder - routes
+// to use if we create custom helpers
 const helpers = require('./utils/helpers'); 
 
 
@@ -11,8 +12,8 @@ const session = require('express-session');
 const exphbs = require('express-handlebars'); 
 
 
-// import sequelize, set up database connection 
-const sequelize = require('./config/connection'); 
+// import sequelize and set up db connection 
+const sequelize = require('./config/connections'); 
 const SequelizeStore = require('connect-session-sequelize')(session.Store); 
 
 // create instance of express
@@ -20,15 +21,15 @@ const app = express();
 
 const PORT = process.env.PORT || 3001; 
 
-// create instance of handlebars (using helpers)
-const hbs = exphbs.create( {helpers} );
+// create instance of handlebars (add { helpers } if needed)
+const hbs = exphbs.create( { helpers } );
 
 
 const sess = {
-    // signs the session id cookie - should be encrypted, ideally
-    secret: 'kimnamjoonkimseokjinminyoongjunghosekparkjiminkimtaehyungjeonjungkookbts', 
+    // signs the session id cookie - should be encrypted, ideally, but we haven't done this in class yet
+    secret: 'benrodriguezmoranmegansargentkylejohsnonbeccalee', 
     cookie: {
-        maxAge: 300000, // max "age" of cookie - 300000 ms (5 min)
+        maxAge: 300000, // max "age" of cookie - 900000 ms (5 min)
         httpOnly: true, // restrict cookie access to HTTP requests
         secure: false, // should set to true when deploying
         sameSite: 'strict', // cookie sharing only for same-site requests
