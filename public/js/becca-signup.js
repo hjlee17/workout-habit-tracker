@@ -4,7 +4,7 @@ const signupHandler = async (event) => {
   const first_name = $('#first-name-signup').val().trim();
   const last_name = $('#last-name-signup').val().trim();
   const email = $('#email-signup').val().trim();
-  const github = $('#github-signup').val().trim();
+  const date_of_birth = $('#date-of-birth-signup').val().trim();
   const password = $('#password-signup').val().trim();
 
   if (!(first_name && last_name && email && password)) {
@@ -16,9 +16,11 @@ const signupHandler = async (event) => {
     first_name: first_name,
     last_name: last_name,
     email: email,
-    github: github,
+    date_of_birth: date_of_birth,
     password: password
   };
+
+  console.log('newUserData:', newUserData)
 
   try {
     const response = await fetch('/api/users', {
@@ -28,11 +30,11 @@ const signupHandler = async (event) => {
     });
 
     if (response.ok) {
-        // replace with correct endpoint
-        document.location.replace('/dashboard');
+        // replace with proper endpoint upon signing in
+        document.location.replace('/becca');
         
     } else {
-        // can i implement error handling when the user already exists?
+        // implement error handling when the user already exists?
         const error_message = await response.text();
         console.error(error_message);
         alert(`Error: ${error_message}\nCheck console for further details.`);
@@ -43,7 +45,6 @@ const signupHandler = async (event) => {
   }
 };
 
-
 // event handler for the signup button
 $('#signup-btn').click(function(event) {
   signupHandler(event);
@@ -52,7 +53,7 @@ $('#signup-btn').click(function(event) {
 // event handler for enter key on the last input field
 $('#password-signup').on('keyup', function(event) {
   if (event.key === 'Enter') {
-      signupHandler(event);
+    signupHandler(event);
   }
 });
 
