@@ -8,7 +8,7 @@ const { withAuth } = require('../utils/auth');
 // router.get('/test', async (req, res) => {
 
 router.get('/test', async (req, res) => {
-    res.render('test');
+    res.render('delete-post');
 })
 
 //-------------------------------------------
@@ -170,8 +170,6 @@ router.get('/posts/:id/update', withAuth, async (req, res) => {
                     attributes: ['date_created', 'content', 'user_id'],
                 },
             ],
-            // render posts in reverse chronological order
-            order: [['date_created', 'DESC']],
         });
 
         if(!postData) {
@@ -206,6 +204,61 @@ router.get('/posts/:id/update', withAuth, async (req, res) => {
 });
 
 
+// GET one post to delete
+router.get('/posts/:id/delete', withAuth, async (req, res) => {
+    console.log('req:', req.session.user_id)
+    console.log('flag:', req.session.logged_in)
+    console.log('req.params.id', req.params.id)
+    try{ 
+        const postData = await Post.findByPk(req.params.id, {
+            include: [
+                {
+                    model: User,
+                    attributes: ['first_name'],
+                },
+                {
+                    model: Comment,
+                    attributes: ['id'],
+                    include: { 
+                        model: User,
+                        attributes: ['first_name']
+                    },
+                    attributes: ['id', 'date_created', 'content', 'user_id'],
+                },
+            ],
+
+        });
+
+        if(!postData) {
+            res.status(404).json({message: 'No post exists with this id!'});
+            return;
+        }
+   
+        const post = postData.get({ plain: true });
+
+        // compare the req.session.user_id and the user_id (part of the Post model)
+        // and then if they DONT match, stop the code and redirect
+        // res.render('test');
+
+        // check logged in user and owner of post
+        if (req.session.user_id !== post.user_id) {
+            res.redirect('/test'); 
+            return;
+        }
+
+        post.logged_in = req.session.logged_in;
+        console.log('deletepost:', post)
+
+        res.render('delete-post', { 
+            post, 
+            logged_in: req.session.logged_in
+        });
+
+    } catch (error) {
+          res.status(500).json(error);
+          console.log(error);
+    };     
+});
 
 
 

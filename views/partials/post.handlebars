@@ -12,8 +12,8 @@
             {{!-- these buttons are only rendered if a "user_logged_in" flag is passed in --}}
             <div class="header-right">
                 {{#if user_logged_in}}
-                    <a href="/posts/{{id}}/update" id="update-post">Edit Post</a>
-                    <button id="delete-post-btn">Delete Post</button>
+                    <a href="/posts/{{id}}/update" class="update-post">Edit Post</a>
+                    <a href="/posts/{{id}}/delete" class="delete-post">Delete Post</a>
                 {{/if}}
             </div>
 

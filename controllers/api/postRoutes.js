@@ -14,7 +14,10 @@ const { withAuth } = require('../../utils/auth');
 // GET all posts 
 router.get('/', async (req, res) => {
   const postData = await Post.findAll({
-    include: [{ model: User }],
+    include: [
+      { model: User },
+      { model: Comment }
+    ],
   });
   res.status(200).json(postData);
 });
@@ -68,7 +71,7 @@ router.post('/create', withAuth, async (req, res) => {
 
 // UPDATE post
 router.put('/update/:id', withAuth, async (req, res) => {
-  console.log("api test'")
+  console.log("post update api test'")
   console.log(req.params.id)
   /* req.body should look like this...
   {
@@ -107,7 +110,38 @@ try {
 
 
 // DELETE post
+router.delete('/delete/:id', withAuth, async (req, res) => {
+  console.log("post delete api test'")
+  console.log(req.params.id)
 
+  /* req.body should look like this...
+  {
+    "post_id": "",
+  }
+  */
+
+  try {
+    const deletedPost = await Post.destroy(
+      {
+        where: {
+          id: req.body.id
+        }
+      }, 
+    );
+
+    // error handling
+    if(!deletedPost) {
+      res.status(404).json({message: 'No post exists with this id!'});
+      return;
+    }
+
+    // send updated post as a res
+    res.json(deletedPost);
+    
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 
 
 
