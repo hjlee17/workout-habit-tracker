@@ -1,63 +1,57 @@
 const { Comment } = require('../models');
-const seedPosts = require('./postData');
+const seedTiles = require('./tileData');
 var colors = require('colors');
 colors.enable();
 
-const seedComments = async () => {
-    // run seedPosts for access to key-value pairs (originally created in userData.js)
-    const userMap = await seedPosts();
-    console.log('\n----- Posts seeded, moving onto Comments... -----\n'.yellow);
 
-    // array of comment data to seed
+const seedComments = async () => {
+    // run seedTiles for access to key-value pairs (originally created in userData.js)
+    const userMap = await seedTiles();
+    console.log('\n----- Tiles seeded, moving onto Comments... -----\n'.yellow);
+
     const commentData = [
         {
-            date_created: "2023-11-11", 
-            content: "Hi, Ian!",
-            user_id: userMap.get("rm@bts.com").id, // user_id referencing Namjoon Kim
-            post_id: 1,
-        },
+            date_created: "10-10-2023",
+            content: "Way to go!",
+            user_id: userMap.get("megan@sargent.com").id, // user_id referencing Megan
+            tile_id: 3,
+        }, 
         {
-            date_created: "2023-11-11",
-            content: "Welcome, Ian!",
-            user_id: userMap.get("jin@bts.com").id, // user_id referencing Seokjin Kim
-            post_id: 1,
-        },
+            date_created: "10-10-2023",
+            content: "Stay strong!",
+            user_id: userMap.get("megan@sargent.com").id, // user_id referencing Megan
+            tile_id: 5,
+        }, 
         {
-            date_created: "2023-11-11", 
-            content: "Glad to have you here!",
-            user_id: userMap.get("suga@bts.com").id, // user_id referencing Yoongi Min
-            post_id: 1,
-        },
+            date_created: "10-10-2023",
+            content: "You've got this!",
+            user_id: userMap.get("ben@rodriguez.com").id, // user_id referencing Ben
+            tile_id: 1,
+        }, 
         {
-            date_created: "2023-11-11", 
-            content: "Excited that you're here!",
-            user_id: userMap.get("jhope@bts.com").id, // user_id referencing Hoseok Jung
-            post_id: 1,
-        },
+            date_created: "10-10-2023",
+            content: "Don't give up!",
+            user_id: userMap.get("ben@rodriguez.com").id, // user_id referencing Ben
+            tile_id: 6,
+        }, 
         {
-            date_created: "2023-11-11", 
-            content: "Ian! Hello!",
-            user_id: userMap.get("jimin@bts.com").id, // user_id referencing Jimin Park
-            post_id: 1,
-        },
+            date_created: "10-10-2023",
+            content: "Great job!",
+            user_id: userMap.get("becca@lee.com").id, // user_id referencing Becca
+            tile_id: 2,
+        }, 
         {
-            date_created: "2023-11-11", 
-            content: "Welcome!",
-            user_id: userMap.get("v@bts.com").id, // user_id referencing Taehyung Kim
-            post_id: 1,
-        },
-        {
-            date_created: "2023-11-11", 
-            content: "Hi, Ian! I like your name :)",
-            user_id: userMap.get("jungkook@bts.com").id, // user_id referencing Jungkook Jeon
-            post_id: 1,
-        },
+            date_created: "10-10-2023",
+            content: "Almost there!",
+            user_id: userMap.get("becca@lee.com").id, // user_id referencing Becca
+            tile_id: 4,
+        }, 
     ];
 
     // create comments in db
     await Comment.bulkCreate(commentData);
 
-};
+}
 
 
 module.exports = seedComments;
