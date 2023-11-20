@@ -7,10 +7,6 @@ const updatePostHandler = async (event) => {
     const post_id = window.location.toString().split("/")[
         window.location.toString().split("/").length - 2
     ];
-    
-    // const post_id = Number(window.location.toString().split("/")[
-    //     window.location.toString().split("/").length - 2
-    // ]);
 
 
     const updatedPostInput = {
@@ -23,7 +19,7 @@ const updatePostHandler = async (event) => {
 
     if (updatedTitle && updatedPostContent) {
         try {
-            const response = await fetch(`window.location.origin/api/posts/update/${post_id}`, {
+            const response = await fetch(`/api/posts/update/${post_id}`, {
                 method: 'PUT',
                 body: JSON.stringify(updatedPostInput),
                 headers: { 'Content-Type': 'application/json' },

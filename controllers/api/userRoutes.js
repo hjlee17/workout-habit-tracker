@@ -1,6 +1,7 @@
 const router = require('express').Router();
 const { User } = require('../../models');
 const { Post } = require('../../models');
+const { withAuth } = require('../../utils/auth');
 
 // The `/api/users` endpoint
 
@@ -29,6 +30,8 @@ router.delete('/:id', async (req, res) => {
 // ------------------------------------------------------------------
 
 
+
+// The `/api/users` endpoint
 // create a new user
 router.post('/', async (req, res) => {
   try {
@@ -84,8 +87,8 @@ router.post('/login', async (req, res) => {
       res.json({ user: userData, message: 'You are now logged in!' });
     });
 
-  } catch (err) {
-    res.status(400).json(err);
+  } catch (error) {
+    res.status(400).json(error);
   }
 });
 
