@@ -26,21 +26,23 @@
             <h1 class="title">Tech Blog</h1>
         </div>
 
-        <div></div>
+        <div class="main">
             <main>
-            <!-- Render the sub layout -->
+            <!-- render the layout -->
                 {{{ body }}}
             </main>
         </div>
 
+        <div class="footer">
+        </div>
 
     </div>
-    <!-- Render script for logged in users only -->
+    <!-- conditionally render script for logged in users only -->
     {{#if logged_in}}
-    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="/js/logout.js"></script>
     {{/if}}
 </body>
 
+<script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
 
 </html>
