@@ -1,4 +1,8 @@
 assignment-instructions/
+package-lock.json
+___notes.txt
+color-palette.jpg
+
 
 node_modules/
 .env
