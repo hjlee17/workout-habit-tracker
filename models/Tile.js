@@ -1,28 +1,37 @@
 const { Model, DataTypes } = require('sequelize');
-const sequelize = require('../config/connection');
+const sequelize = require('../config/connections');
 
-class Post extends Model {}
+class Tile extends Model {}
   
-  Post.init(
+Tile.init(
     {
+      // assigned by database, primary key
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
         primaryKey: true,
         autoIncrement: true,
       },
+      // title of the tile (e.g. "Miles Ran")
+      // the validator is an arbitrary number so that the title is not blank, and not only a single letter
       title: {
         type: DataTypes.STRING,
         allowNull: false,
+        validate: {
+          len: [2], 
+        }
       },
+      // date tile is created, assigns the current date by default
       date_created: {
         type: DataTypes.DATE,
         defaultValue: DataTypes.NOW,
       },
-      content: {
-        type: DataTypes.TEXT,
-        allowNull: false,
+      // optional description of tile
+      description: {
+        type: DataTypes.STRING,
+        allowNull: true,
       },
+      // references the user it belongs to with the foreign key
       user_id: {
         type: DataTypes.INTEGER,
         references: {
@@ -37,9 +46,9 @@ class Post extends Model {}
       freezeTableName: true,
       // converts camel-cased column names to snake case
       underscored: true,
-      modelName: 'post',
+      modelName: 'tile',
     }
   );
   
-module.exports = Post;
+  module.exports = Tile;
   

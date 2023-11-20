@@ -1,27 +1,33 @@
 const User = require('./User');
-const Post = require('./Post');
+const Tile = require('./Tile');
 const Comment = require('./Comment');
+const Tracker = require('./Tracker');
+
 
 // user model associations
-User.hasMany(Post, {
+User.hasMany(Tile, {
     foreignKey: 'user_id',
-    onDelete: 'CASCADE', // when user is deleted, their posts are deleted
+    onDelete: 'CASCADE' // when user is deleted, their tiles are deleted
 });
 
 User.hasMany(Comment, {
     foreignKey: 'user_id',
-    onDelete: 'CASCADE', // when user is deleted, their comments are deleted
+    onDelete: 'CASCADE' // when user is deleted, their comments are deleted
 });
 
 
-// post model associations
-Post.belongsTo(User, {
+// tile model associations
+Tile.belongsTo(User, {
     foreignKey: 'user_id'
 });
 
-Post.hasMany(Comment, {
-    foreignKey: 'post_id',
-    onDelete: 'CASCADE', // when post is deleted, corresponding comments are deleted
+Tile.hasOne(Tracker, {
+    foreignKey: 'tile_id'
+});
+
+Tile.hasMany(Comment, {
+    foreignKey: 'tile_id',
+    onDelete: 'CASCADE' // when tile is deleted, corresponding comments are deleted
 });
 
 
@@ -30,8 +36,14 @@ Comment.belongsTo(User, {
     foreignKey: 'user_id'
 });
 
-Comment.belongsTo(Post, {
-    foreignKey: 'post_id'
+Comment.belongsTo(Tile, {
+    foreignKey: 'tile_id'
 });
 
-module.exports = { User, Post, Comment };
+
+// tracker model associations
+Tracker.belongsTo(Tile, {
+    foreignKey: 'tile_id'
+});
+
+module.exports = { User, Tile, Comment, Tracker };
