@@ -10,7 +10,7 @@
         {{!-- these buttons are only rendered if a "user_logged_in" flag is passed in --}}
         <div class="header-right">
             {{#if user_logged_in}}
-                <input type="number" class="field update-value" id="tracker-{{tracker.id}}" placeholder="Enter value to add"/>
+                <input type="number" class="field update-value" id="tracker-{{tracker.id}}" placeholder="Enter value"/>
                 <button 
                 class="update-tile-btn current-value-{{tracker.current_tracker_status}} tracker-{{tracker.id}}"
                 href="/update/tile/{{id}}">Update Tile</button>

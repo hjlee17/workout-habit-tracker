@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { Tile, User, Comment, Tracker } = require('../../models');
 const { withAuth } = require('../../utils/auth');
 
-// The `/api/tiles` endpoint
+// The `/api/trackers` endpoint
 
 
 // ------------------------------------------------------------------
@@ -16,8 +16,25 @@ router.get('/', async (req, res) => {
     });
     res.status(200).json(trackerData);
 });
+
+
+
+
 // ------------------------------------------------------------------
 
+
+// CREATE new tracker
+router.post('/create', withAuth, async (req, res) => {
+  const newTracker = await Tracker.create(req.body);
+  /* req.body should look like this...
+    {
+      "tracker_goal": "",
+      "current_tracker_status": "",
+      "tile_id": "
+    }
+  */
+  res.json(newTracker);
+});
 
 
 // UPDATE a tracker by its `id` value

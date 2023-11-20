@@ -1,6 +1,6 @@
 const router = require('express').Router();
 const { Tile, User, Comment, Tracker } = require('../../models');
-// const withAuth = require('../../utils/auth');
+const { withAuth } = require('../../utils/auth');
 
 // The `/api/tiles` endpoint
 
@@ -17,6 +17,9 @@ router.get('/', async (req, res) => {
     res.status(200).json(tileData);
   });
   
+
+
+
   
   // DELETE a tile 
   router.delete('/:id', async (req, res) => {
@@ -46,6 +49,32 @@ router.get('/:id', async (req, res) => {
     res.status(500).json(err);
     }
 });
+
+
+// CREATE new tile
+router.post('/create', withAuth, async (req, res) => {
+  
+  /* req.body should look like this...
+    {
+      "title": "",
+      "description": "",
+      "user_id": """
+    }
+  */
+  try {
+    const newTileData = await {
+      ...req.body,
+      // now grab user id from the session info through withAuth
+      user_id: req.session.user_id,
+    }
+
+    const newTile = await Tile.create(newTileData);
+    res.json(newTile);
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
+
 
 
 
