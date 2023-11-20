@@ -1,300 +1,388 @@
 const router = require('express').Router();
-const sequelize = require('../config/connection');
-const { User, Post, Comment } = require('../models');
+const { User, Tile, Comment, Tracker } = require('../models');
 const { withAuth } = require('../utils/auth');
 
-//-------------------------------------------
-// test routes
-// router.get('/test', async (req, res) => {
 
+// ------------------------------------------------------------------------------------------
+// for testing during development 
+
+// test route for layout development
+router.get('/meg', async (req, res) => {
+  res.render('test-becca');
+});
+
+// test route for any script/route development
+router.get('/ben', async (req, res) => {
+  res.render('test-ben');
+});
+
+// test route for development, endpoint: becca
+router.get('/becca', async (req, res) => {
+  // test-becca layout
+  res.render('test-becca');
+});
+
+// test route for development, endpoint: test-becca-login
+router.get('/test-becca-login', async (req, res) => {
+  // test-becca-login layout
+  res.render('test-becca-login-and-signup');
+});
+
+// test route for development, endpoint: test-becca-login
+router.get('/test-becca-dashboard', async (req, res) => {
+  // test-becca-login layout
+  res.render('test-becca-dashboard');
+});
+
+// test route for development
 router.get('/test', async (req, res) => {
-    res.render('delete-post');
-})
-
-//-------------------------------------------
-  
-
-// GET all posts (by all users) to render to homepage
-router.get('/', async (req, res) => {
-    try {
-        const postData = await Post.findAll({
-            include: [
-                {
-                    model: User,
-                    attributes: ['first_name'],
-                },
-                {
-                    model: Comment,
-                },
-            ],
-            // render posts in reverse chronological order
-            order: [['date_created', 'DESC']],
-        });
-
-
-        // add a "user_logged_in" flag to each post belong to logged in user
-        // in the posts array for the post partial layout
-        // by using the session user_id and comparing it to the post's user_id
-        const posts = postData.map((post) => {
-            const onePost = post.get({ plain: true });
-            onePost.user_logged_in = req.session.user_id === post.user_id;
-            return onePost;
-        });
-
-        res.render('homepage', {
-            posts,
-            // "logged_in" flag passed to use in main
-            logged_in: req.session.logged_in
-        });
-
-    } catch (error) {
-        res.status(500).json(error);
-    }
+  res.render('test');
 });
 
+// ------------------------------------------------------------------------------------------
 
-// GET all posts (by logged in user) to render to dashboard
-router.get('/dashboard', withAuth, async (req, res) => {
-    console.log('req:', req.session.user_id)
-    try {
-        const postData = await Post.findAll({
-            where: {
-                user_id: req.session.user_id
-            },
-            include: [
-                {
-                  model: User,
-                  attributes: ['first_name'],
-                },
-                {
-                    model: Comment,
-                },
-            ],
-            // render posts in reverse chronological order
-            order: [['date_created', 'DESC']],
-        });
-
-        // add a "user_logged_in" flag to each post in the posts array for the post partial layout
-        const posts = postData.map((post) => {
-            const onePost = post.get({ plain: true });
-            // "req.session.user_id === post.user_id"
-            // i don't need to do this comparison for the homepage because... 
-            // i've only retrieved posts belonging to the user 
-            onePost.user_logged_in = true;
-            return onePost;
-        });
-
-        console.log('posts:', posts)
-
+// // GET all users to render to homepage
+router.get('/', withAuth, async (req, res) => {
+  try {
+      const userData = await User.findAll({
+          include: [
+              {
+                model: Tile,
+              },
+          ],
+      });
       
-        res.render('dashboard', {
-            posts, // user_logged_in flag attached to posts (for use in post partial)
-            // "logged_in" flag passed to use in main
-            logged_in: req.session.logged_in
-        });
+      // serialize for handlebars
+      const users = userData.map((user) => user.get({ plain: true }));
+      console.log('users:', users)
 
-    } catch (error) {
+      // render homepage
+      res.render('test-becca-homepage', {
+        users,
+        logged_in: req.session.logged_in
+      });
+
+  } catch (error) {
+      res.status(500).json(error);
+  }
+});
+
+
+// GET all tiles (by logged in user) to populate dashboard -- DEVELOPED BY BECCA
+// NEEDS FURTHER DEVELOPMENT.
+router.get('/dashboard', withAuth, async (req, res) => {
+  console.log('req:', req.session.user_id)
+  try {
+      const [tileData, commentData] = await Promise.all([
+          
+        Tile.findAll({
+            where: {
+              user_id: req.session.user_id
+              },
+            include: [
+              {
+                model: User,
+                attributes: ['first_name'],
+              },
+              {
+                model: Comment,
+              },
+              {
+                model: Tracker,
+                attributes: ['id', 'tracker_goal', 'current_tracker_status', 'percentage'],
+              },
+            ],
+        }),
+      ])
+
+      const loggedInUser = req.session.user_id;
+
+      // add a "user_logged_in" flag to each tile in the array for the tile partial layout
+      // for use with delete/update
+      const tiles = tileData.map(tile => {
+          const oneTile = tile.get({ plain: true });
+          // "req.session.user_id === post.user_id"
+          // i don't need to do this comparison for the homepage because... 
+          // i've only retrieved posts belonging to the user 
+          oneTile.user_logged_in = true;
+          return oneTile;
+      });
+
+      console.log('tiles:', tiles)
+
+      res.render('test-becca-dashboard', {
+        tiles, 
+        // "logged_in" flag passed to use in main
+        logged_in: req.session.logged_in
+      });
+
+  } catch (error) {
+      res.status(500).json(error);
+  }
+});
+
+
+// GET all of a users tiles to view or this redirects to dashboard 
+router.get('/users/:id', withAuth, async (req, res) => {
+  console.log('req:', req.session.user_id)
+  console.log('flag:', req.session.logged_in)
+  console.log('req.params.id:', req.params.id)
+  // store user_id of logged in user
+  const loggedInUser = req.session.user_id;
+  console.log("loggedInUser: ", loggedInUser)
+
+  try { 
+     // retrieve tile data from db
+      const tileData = await Tile.findAll({
+        where: {
+          user_id: req.params.id,
+        },
+        include: [
+          {
+            model: User,
+            attributes: ['first_name', 'last_name'],
+          },
+          {
+            model: Comment,
+            attributes: [ 'id', 'date_created', 'content', 'user_id', 'tile_id' ],
+          },
+          {
+            model: Tracker,
+            attributes: [ 'id', 'tracker_goal', 'current_tracker_status', 'percentage', 'tile_id' ],
+          },
+        ],
+      })
+      
+      // error handling
+      if(!tileData) {
+          res.status(404).json({message: 'No tiles exist!'});
+          return;
+      }
+
+      // serialize tiles and comments for handlebars, while adding user_logged_in flag added to each object 
+      // this flag will be set to true/false and used in handlebars for conditional rendering
+
+      // add the 'user_logged_in' flag to each tile
+      // user_logged_in flag should be added also if the user_id of tile = loggedInUser
+      // could i handle this in the model?
+
+      const tiles = tileData.map(tile => {
+        const oneTile = tile.get({ plain: true });
+        oneTile.user_logged_in = loggedInUser === oneTile.user_id || loggedInUser === tile.user_id;
+        return oneTile;
+      })
+      console.log('tiles:', tiles)
+
+      // redirect to dashboard if user is visiting their own page
+      if (loggedInUser == req.params.id) {
+        res.redirect('/dashboard'); 
+        return;
+      }
+      
+      res.render('test-becca-single-user', { 
+          tiles, // user_logged_in flag attached to post (for use in post partial) 
+          // "logged_in" flag passed to use in main
+          logged_in: req.session.logged_in,
+      });
+
+  } catch (error) {
         res.status(500).json(error);
-    }
-});
-
-
-// GET one post to render to single-posts layout
-router.get('/posts/:id', withAuth, async (req, res) => {
-    console.log('req:', req.session.user_id)
-    console.log('flag:', req.session.logged_in)
-    console.log('post_id:', req.params.id)
-
-    try{ 
-        const [postData, commentData] = await Promise.all([
-            
-            Post.findByPk(req.params.id, {
-                include: [
-                    {
-                        model: User,
-                        attributes: ['first_name'],
-                    },
-                ],
-            }),
-
-            Comment.findAll({
-                where: {
-                    post_id: req.params.id,
-                },
-                include: [
-                    {
-                        model: User,
-                        attributes: ['first_name'],
-                    },
-                ],
-                attributes: ['id', 'date_created', 'content', 'user_id', 'post_id'],
-            }),
-
-        ])
-        
-        // error handling
-        if(!postData) {
-            res.status(404).json({message: 'No post exists with this id!'});
-            return;
-        }
-
-        const loggedInUser = req.session.user_id;
-
-        const post = postData.get({ plain: true });
-        // user_logged_in flag added to post array for post partial layout
-        post.user_logged_in = loggedInUser === post.user_id;
-        console.log('post:', post)
-
-
-        const comments = commentData.map(comment => {
-            const oneComment = comment.get({ plain: true });
-            // add the 'user_logged_in' flag to each comment
-            // user_logged_in flag should be added also if the post_id = logged in user
-            oneComment.user_logged_in = loggedInUser === oneComment.user_id || loggedInUser === post.user_id;
-            return oneComment;
-        });
-        console.log('comments:', comments)
-        
-    
-        res.render('single-post', { 
-            post, // user_logged_in flag attached to post (for use in post partial) 
-            comments, // user_logged_in flag attached to comments (for use in comment partial) 
-            // "logged_in" flag passed to use in main
-            logged_in: req.session.logged_in,
-        });
-
-    } catch (error) {
-          res.status(500).json(error);
-          console.log(error);
-    };     
+        console.log(error);
+  };     
 });
 
 
 
-// GET one post to update
-router.get('/posts/:id/update', withAuth, async (req, res) => {
-    console.log('req:', req.session.user_id)
-    console.log('flag:', req.session.logged_in)
-    console.log('req.params.id', req.params.id)
-    try{ 
-        const postData = await Post.findByPk(req.params.id, {
+// // GET all users to render to homepage
+router.get('/', withAuth, async (req, res) => {
+  try {
+      const userData = await User.findAll({
+          include: [
+              {
+                model: Tile,
+              },
+          ],
+      });
+      
+      // serialize for handlebars
+      const users = userData.map((user) => user.get({ plain: true }));
+      console.log('users:', users)
+
+      // render homepage
+      res.render('test-becca-homepage', {
+        users,
+        logged_in: req.session.logged_in
+      });
+
+  } catch (error) {
+      res.status(500).json(error);
+  }
+});
+
+
+// GET all tiles (by logged in user) to populate dashboard -- DEVELOPED BY BECCA
+// NEEDS FURTHER DEVELOPMENT.
+router.get('/dashboard', withAuth, async (req, res) => {
+  console.log('req:', req.session.user_id)
+  try {
+      const [tileData, commentData] = await Promise.all([
+          
+        Tile.findAll({
+            where: {
+              user_id: req.session.user_id
+              },
             include: [
+              {
+                model: User,
+                attributes: ['first_name'],
+              },
+              {
+                model: Comment,
+              },
+              {
+                model: Tracker,
+                attributes: ['id', 'tracker_goal', 'current_tracker_status', 'percentage'],
+              },
+            ],
+        }),
+      ])
+
+      const loggedInUser = req.session.user_id;
+
+      // add a "user_logged_in" flag to each tile in the array for the tile partial layout
+      // for use with delete/update
+      const tiles = tileData.map(tile => {
+          const oneTile = tile.get({ plain: true });
+          // "req.session.user_id === post.user_id"
+          // i don't need to do this comparison for the homepage because... 
+          // i've only retrieved posts belonging to the user 
+          oneTile.user_logged_in = true;
+          return oneTile;
+      });
+
+      console.log('tiles:', tiles)
+
+      res.render('test-becca-dashboard', {
+        tiles, 
+        // "logged_in" flag passed to use in main
+        logged_in: req.session.logged_in
+      });
+
+  } catch (error) {
+      res.status(500).json(error);
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// GET one tile to render to single-posts layout
+router.get('/tiles/:id', withAuth, async (req, res) => {
+  console.log('req:', req.session.user_id)
+  console.log('flag:', req.session.logged_in)
+  console.log('tile_id:', req.params.id)
+
+  try{ 
+      const [tileData, commentData] = await Promise.all([
+          
+          Tile.findByPk(req.params.id, {
+              include: [
                 {
                     model: User,
                     attributes: ['first_name'],
                 },
-                {
-                    model: Comment,
-                    include: { 
-                        model: User,
-                        attributes: ['first_name']
-                    },
-                    attributes: ['date_created', 'content', 'user_id'],
-                },
-            ],
-        });
+              ],
+          }),
 
-        if(!postData) {
-            res.status(404).json({message: 'No post exists with this id!'});
-            return;
-        }
-   
-        const post = postData.get({ plain: true });
-
-        // compare the req.session.user_id and the user_id (part of the Post model)
-        // and then if they DONT match, stop the code and redirect
-        // res.render('test');
-
-        // check logged in user and owner of post
-        if (req.session.user_id !== post.user_id) {
-            res.redirect('/test'); 
-            return;
-        }
-
-        post.logged_in = req.session.logged_in;
-        console.log('updatepost:', post)
-
-        res.render('update-post', { 
-            post, 
-            logged_in: req.session.logged_in
-        });
-
-    } catch (error) {
-          res.status(500).json(error);
-          console.log(error);
-    };     
-});
-
-
-// GET one post to delete
-router.get('/posts/:id/delete', withAuth, async (req, res) => {
-    console.log('req:', req.session.user_id)
-    console.log('flag:', req.session.logged_in)
-    console.log('req.params.id', req.params.id)
-    try{ 
-        const postData = await Post.findByPk(req.params.id, {
-            include: [
-                {
+          Comment.findAll({
+              where: {
+                tile_id: req.params.id,
+              },
+              include: [
+                  {
                     model: User,
                     attributes: ['first_name'],
-                },
-                {
-                    model: Comment,
-                    attributes: ['id'],
-                    include: { 
-                        model: User,
-                        attributes: ['first_name']
-                    },
-                    attributes: ['id', 'date_created', 'content', 'user_id'],
-                },
-            ],
+                  },
+              ],
+              attributes: ['id', 'date_created', 'content', 'user_id', 'tile_id'],
+          }),
+      ])
+      
+      // error handling
+      if(!tileData) {
+          res.status(404).json({message: 'No tile exists with this id!'});
+          return;
+      }
 
-        });
+      const loggedInUser = req.session.user_id;
 
-        if(!postData) {
-            res.status(404).json({message: 'No post exists with this id!'});
-            return;
-        }
-   
-        const post = postData.get({ plain: true });
+      const tile = tileData.get({ plain: true });
+      // user_logged_in flag added to post array for post partial layout
+      tile.user_logged_in = loggedInUser === tile.user_id;
+      console.log('tile:', tile)
 
-        // compare the req.session.user_id and the user_id (part of the Post model)
-        // and then if they DONT match, stop the code and redirect
-        // res.render('test');
 
-        // check logged in user and owner of post
-        if (req.session.user_id !== post.user_id) {
-            res.redirect('/test'); 
-            return;
-        }
+      const comments = commentData.map(comment => {
+          const oneComment = comment.get({ plain: true });
+          // add the 'user_logged_in' flag to each comment
+          // user_logged_in flag should be added also if the post_id = logged in user
+          oneComment.user_logged_in = loggedInUser === oneComment.user_id || loggedInUser === tile.user_id;
+          return oneComment;
+      });
+      console.log('comments:', comments)
+      
+  
+      res.render('test-becca-single-tile', { 
+          tile, // user_logged_in flag attached to post (for use in post partial) 
+          comments, // user_logged_in flag attached to comments (for use in comment partial) 
+          // "logged_in" flag passed to use in main
+          logged_in: req.session.logged_in,
+      });
 
-        post.logged_in = req.session.logged_in;
-        console.log('deletepost:', post)
-
-        res.render('delete-post', { 
-            post, 
-            logged_in: req.session.logged_in
-        });
-
-    } catch (error) {
-          res.status(500).json(error);
-          console.log(error);
-    };     
+  } catch (error) {
+        res.status(500).json(error);
+        console.log(error);
+  };     
 });
 
 
 
-// login route
+// login route -- DEVELOPED BY BECCA
 router.get('/login', async (req, res) => {
 
-    // if the user is already logged in, redirect the request to another route
-    if (req.session.logged_in) {
-        res.redirect('/dashboard');
-        return;
-    }
+  // if the user is already logged in, redirect the request to another route
+  if (req.session.logged_in) {
+      res.redirect('/test-becca-dashboard');
+      return;
+  }
 
-    res.render('login'); 
+  res.render('test-becca-login-and-signup'); 
 });
 
-  
+
+
 module.exports = router;
