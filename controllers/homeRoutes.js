@@ -175,6 +175,9 @@ router.get('/tiles/:id', withAuth, async (req, res) => {
                     model: User,
                     attributes: ['first_name'],
                 },
+                {
+                  model: Comment
+                }
               ],
           }),
 
