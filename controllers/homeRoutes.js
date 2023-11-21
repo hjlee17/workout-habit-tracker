@@ -4,44 +4,13 @@ const { withAuth } = require('../utils/auth');
 
 
 // ------------------------------------------------------------------------------------------
-// for testing during development 
-
-// test route for layout development
-router.get('/meg', async (req, res) => {
-  res.render('test-becca');
-});
-
-// test route for any script/route development
-router.get('/ben', async (req, res) => {
-  res.render('test-ben');
-});
-
-// test route for development, endpoint: becca
-router.get('/becca', async (req, res) => {
-  // test-becca layout
-  res.render('test-becca');
-});
-
-// test route for development, endpoint: test-becca-login
-router.get('/test-becca-login', async (req, res) => {
-  // test-becca-login layout
-  res.render('test-becca-login-and-signup');
-});
-
-// test route for development, endpoint: test-becca-login
-router.get('/test-becca-dashboard', async (req, res) => {
-  // test-becca-login layout
-  res.render('test-becca-dashboard');
-});
-
 // test route for development
 router.get('/test', async (req, res) => {
   res.render('test');
 });
-
 // ------------------------------------------------------------------------------------------
 
-// // GET all users to render to homepage
+// GET all users to render to homepage
 router.get('/', withAuth, async (req, res) => {
   try {
       const userData = await User.findAll({
@@ -68,8 +37,7 @@ router.get('/', withAuth, async (req, res) => {
 });
 
 
-// GET all tiles (by logged in user) to populate dashboard -- DEVELOPED BY BECCA
-// NEEDS FURTHER DEVELOPMENT.
+// GET all tiles (by logged in user) to populate dashboard
 router.get('/dashboard', withAuth, async (req, res) => {
   console.log('req:', req.session.user_id)
   try {
@@ -192,114 +160,6 @@ router.get('/users/:id', withAuth, async (req, res) => {
 });
 
 
-
-// // GET all users to render to homepage
-router.get('/', withAuth, async (req, res) => {
-  try {
-      const userData = await User.findAll({
-          include: [
-              {
-                model: Tile,
-              },
-          ],
-      });
-      
-      // serialize for handlebars
-      const users = userData.map((user) => user.get({ plain: true }));
-      console.log('users:', users)
-
-      // render homepage
-      res.render('test-becca-homepage', {
-        users,
-        logged_in: req.session.logged_in
-      });
-
-  } catch (error) {
-      res.status(500).json(error);
-  }
-});
-
-
-// GET all tiles (by logged in user) to populate dashboard -- DEVELOPED BY BECCA
-// NEEDS FURTHER DEVELOPMENT.
-router.get('/dashboard', withAuth, async (req, res) => {
-  console.log('req:', req.session.user_id)
-  try {
-      const [tileData, commentData] = await Promise.all([
-          
-        Tile.findAll({
-            where: {
-              user_id: req.session.user_id
-              },
-            include: [
-              {
-                model: User,
-                attributes: ['first_name'],
-              },
-              {
-                model: Comment,
-              },
-              {
-                model: Tracker,
-                attributes: ['id', 'tracker_goal', 'current_tracker_status', 'percentage'],
-              },
-            ],
-        }),
-      ])
-
-      const loggedInUser = req.session.user_id;
-
-      // add a "user_logged_in" flag to each tile in the array for the tile partial layout
-      // for use with delete/update
-      const tiles = tileData.map(tile => {
-          const oneTile = tile.get({ plain: true });
-          // "req.session.user_id === post.user_id"
-          // i don't need to do this comparison for the homepage because... 
-          // i've only retrieved posts belonging to the user 
-          oneTile.user_logged_in = true;
-          return oneTile;
-      });
-
-      console.log('tiles:', tiles)
-
-      res.render('test-becca-dashboard', {
-        tiles, 
-        // "logged_in" flag passed to use in main
-        logged_in: req.session.logged_in
-      });
-
-  } catch (error) {
-      res.status(500).json(error);
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 // GET one tile to render to single-posts layout
 router.get('/tiles/:id', withAuth, async (req, res) => {
   console.log('req:', req.session.user_id)
@@ -329,6 +189,7 @@ router.get('/tiles/:id', withAuth, async (req, res) => {
                   },
               ],
               attributes: ['id', 'date_created', 'content', 'user_id', 'tile_id'],
+              order: [['date_created', 'DESC']],
           }),
       ])
       
@@ -370,8 +231,65 @@ router.get('/tiles/:id', withAuth, async (req, res) => {
 });
 
 
+// GET one tile to delete
+router.get('/tiles/delete/:id', withAuth, async (req, res) => {
+  console.log('req:', req.session.user_id)
+  console.log('flag:', req.session.logged_in)
+  console.log('req.params.id', req.params.id)
+  try{ 
+      const tileData = await Tile.findByPk(req.params.id, {
+          include: [
+              {
+                model: User,
+                attributes: ['first_name'],
+              },
+              { 
+                model: Comment,
+              },
+              {
+                model: Tracker,
+                attributes: ['id', 'tracker_goal','current_tracker_status', 'percentage']
+              },
+          ],
 
-// login route -- DEVELOPED BY BECCA
+      });
+
+      if(!tileData) {
+          res.status(404).json({message: 'No tile exists with this id!'});
+          return;
+      }
+ 
+      const tile = tileData.get({ plain: true });
+
+      // compare the req.session.user_id and the user_id (part of the Tile model)
+      // and then if they DONT match, stop the code and redirect
+      // res.render('test');
+
+      // check logged in user and owner of post
+      if (req.session.user_id !== tile.user_id) {
+          res.redirect('/test'); 
+          return;
+      }
+
+      tile.logged_in = req.session.logged_in;
+      console.log('deletetile:', tile)
+
+      res.render('test-becca-confirm-delete-tile', { 
+          tile, 
+          logged_in: req.session.logged_in
+      });
+
+  } catch (error) {
+        res.status(500).json(error);
+        console.log(error);
+  };     
+});
+
+
+
+
+
+// login route
 router.get('/login', async (req, res) => {
 
   // if the user is already logged in, redirect the request to another route
