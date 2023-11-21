@@ -1,0 +1,431 @@
+/* main layout */
+body {
+    height: 100%;
+    margin: 0;
+    font-family:'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+}
+
+.header {
+    /* top right bottom left; */
+    padding: 25px;
+    background-color: gray;
+}
+
+.navbar { /* navigation bar */
+    display: flex;
+    font-size: small;
+    color: black;
+}
+
+.navbar a, .navbar button { /* navbar links */
+    display: flex;
+    background-color: black;
+    color: white;
+    width: 130px;
+    border-radius: 10px;
+    margin: 2px;
+    height: 50px;
+    text-decoration: none;
+    justify-content: center;
+    align-items: center;
+
+    font-size: 18px;
+}
+
+.navbar button { /* navbar logout button - reset button defaults */
+    background-color: black;
+    border: none;
+    outline: none;
+    box-shadow: none;
+    font-family:'Gill Sans', 'Gill Sans MT', 'Trebuchet MS', sans-serif;
+}
+
+.navbar a:hover, .navbar button:hover { /* navbar links on hover */
+    background-color: white;
+    color: black;
+}
+
+.title {
+  display: flex;
+  /* top right bottom left; */
+  padding: 15px 0px 15px 15px;
+
+}
+
+.footer {
+  height: 20px;
+}
+/* ----------------------------------------------------------------------------------- */
+
+
+/* ----------------------------------------------------------------------------------- */
+/* login/signup page */
+.login-signup-wrapper {
+    display: flex;
+    flex-direction: row;
+    min-width: 100%;
+    max-width: 100%;
+    
+}
+.ls-column {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+    align-items: center;
+    margin: 50px;
+    background-color: var(--yellow);
+    padding: 20px;
+    box-sizing: border-box; /* include padding in width calculation */
+}
+  
+.ls-column .field {
+    border-radius: 7.5px;
+    padding: 10px;
+    width: 100%; 
+    margin-bottom: 10px;
+}
+  
+.ls-column button {
+    background-color: gray;
+    color: white;
+    border: none;
+    border-radius: 7.5px;
+    padding: 10px;
+    cursor: pointer;
+    width: 100%; 
+}
+/* ----------------------------------------------------------------------------------- */
+
+
+/* ----------------------------------------------------------------------------------- */
+
+.user-partial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 25px 0 25px 0;
+}
+
+.user-container {
+    background-color: lightslategray;
+    border-radius: 10px;
+    width: 90%;
+}
+
+.user-header {
+    display: flex;
+    /* top right bottom left; */
+    padding: 15px;
+    color: black;
+}  
+/* top right bottom left; */
+
+.user-header-left {
+    width: 75%;
+    text-align: left;
+    color: black;
+}
+
+.user-header-left a {
+    text-decoration: none;
+    font-size: 1.5em;
+    color: black;
+}
+
+.user-header-right {
+    display: flex;
+    flex-direction: column;
+    width: 25%;
+    align-items:flex-end;
+    margin-right: 10px;
+    justify-content: center;
+}
+
+.user-body {
+    display: flex;
+    /* top right bottom left; */
+    padding: 0 0 0 15px;
+    color: black;
+}
+/* ----------------------------------------------------------------------------------- */
+
+/* ----------------------------------------------------------------------------------- */
+
+.single-user-partial {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.single-user-container {
+    width: 100%;
+}
+
+.single-user-header {
+    background-color: black;
+    padding: 15px 0 15px 0;
+    color: white;
+    text-align: center;
+}
+
+.single-user-body {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+/* ----------------------------------------------------------------------------------- */
+
+
+
+/* ----------------------------------------------------------------------------------- */
+.dashboard h2 {
+    background-color: #3399dd;
+    padding: 15px 0 15px 0;
+    color: black;
+    text-align: left;
+    padding: 15px 10px 15px 10px
+}
+
+/* container for tile-partials */
+.rendered-tile-partials {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+/* ----------------------------------------------------------------------------------- */
+
+
+
+
+
+
+
+/* ----------------------------------------------------------------------------------- */
+
+
+/* tile partials */
+.tile-partial {
+    border-radius: 10px 10px 0 0;
+    width: 30%;
+    max-height: 100%;
+    margin: 10px 15px;
+    background-color: gray;
+}
+
+.tile-header {
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+    /* top right bottom left; */
+    padding: 10px;
+    border-radius: 10px 10px 0 0;
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+}
+
+.tile-header a {
+    text-decoration: none;
+    color: white;
+    font-size: 2em;
+    font-style: bold;
+}
+
+.tile-header .tagline {
+
+    color: white;
+}
+
+.tile-body {
+    display: flex;
+    flex-direction: column;
+    background-color: lightskyblue;
+    justify-content: center;
+    align-items: center;
+}
+
+.tile-body p {
+    /* top right bottom left NO COMMAS */
+    margin: 10px 10px 10px 10px;
+}
+
+.description {
+    font-style: italic;
+}
+
+.current {
+    color: green;
+}
+
+.tracker-view {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 10px;
+    height:250px; 
+    width:250;
+}
+
+.tile-footer {
+    display: flex;
+    flex-direction: column;
+    /* top right bottom left NO COMMAS */
+    margin: 0 10px 0 10px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.footer-edit-row {
+    display: flex;
+    flex-direction: row;
+    /* top right bottom left NO COMMAS */
+    padding: 12px;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.field.update-value {
+    width: 100px;
+    border-radius: 7.5px;
+    padding: 6px;
+    width: 75%; 
+}
+
+.update-tile-btn {
+    border-radius: 10px;
+    /* following three remove button defaults */
+    width: 115px;
+    height: 30px;
+    border-style: none;
+    margin: 0 35px 0 5px;
+    background-color: yellow; 
+    text-decoration: none;
+    font-size: .7em;
+    color: black;
+}
+  
+.delete-tile {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    width: 115px;
+    height: 30px;
+    background-color: red; 
+    text-decoration: none;
+    font-size: .8em;
+    color: white;
+}
+
+.footer-comment-row {
+    height: 30px;
+    border-radius: 10px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.footer-comment-row a {
+    text-decoration: none;
+    font-size: .75em;
+    color: black;
+}
+
+/* ----------------------------------------------------------------------------------- */
+
+/* ----------------------------------------------------------------------------------- */
+.wrapper {
+    display: flex;
+    justify-content: center;
+}
+
+/* create tile container - in dashboard layout */
+.create-tile-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 48%;
+    background-color: lightcyan;
+    padding: 25px;
+    margin-top: 25px;
+    border-radius: 10px;
+
+}
+
+.create-tile-container h2 {
+    text-align: center;
+    background-color: transparent;
+}
+
+.create-tile-container .field, .create-tile-container button {
+    border-radius: 7.5px;
+    padding: 10px;
+    width: 100%; 
+    margin-bottom: 10px;
+}
+
+#new-tile-description {
+    height: 50px;
+}
+/* ----------------------------------------------------------------------------------- */
+
+/* ----------------------------------------------------------------------------------- */
+.single-tile-container {
+    display: flex;
+    flex-direction: row;
+}
+
+
+.right-comments {
+    padding: 50px; 
+    width: 60%;
+}
+
+.create-comment-container {
+    display: flex;
+    flex-direction: column;
+    align-items: left;
+    width: 90%;
+    background-color: lightcyan;
+    padding: 10px;
+    border-radius: 10px;
+
+}
+
+.create-comment-container p {
+    font-size: 1.5em;
+    margin: 10px 0 10px 0;
+}
+
+#new-comment-content {
+    height: 100px;
+    margin: 0 0 10px 0;
+    border-radius: 5px;
+}
+
+/* #comment-btn {
+} */
+
+/* ----------------------------------------------------------------------------------- */
+
+/* ----------------------------------------------------------------------------------- */
+.delete-confirm-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+
+#confirm-delete-btn {
+    background-color: red;
+    padding: 10px;
+    margin-bottom: 20px;
+    width:50%;
+    border-radius: 10px;
+    color: white;
+    font-size: 1.5em;
+    font-style: bold;
+}
+
+/* ----------------------------------------------------------------------------------- */
