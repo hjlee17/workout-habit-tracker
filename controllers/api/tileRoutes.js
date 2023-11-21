@@ -32,7 +32,7 @@ router.get('/', async (req, res) => {
   });
   
   
-  // ------------------------------------------------------------------
+// ------------------------------------------------------------------
  
 // GET one tile, with associated user and comment data
 router.get('/:id', async (req, res) => {
@@ -75,6 +75,43 @@ router.post('/create', withAuth, async (req, res) => {
   }
 });
 
+
+
+
+
+// DELETE tile
+router.delete('/delete/:id', withAuth, async (req, res) => {
+  console.log("post delete api test'")
+  console.log(req.params.id)
+
+  /* req.body should look like this...
+  {
+    "post_id": "",
+  }
+  */
+
+  try {
+    const deletedTile = await Tile.destroy(
+      {
+        where: {
+          id: req.body.id
+        }
+      }, 
+    );
+
+    // error handling
+    if(!deletedTile) {
+      res.status(404).json({message: 'No tile exists with this id!'});
+      return;
+    }
+
+    // send updated post as a res
+    res.json(deletedTile);
+    
+  } catch (error) {
+    res.status(500).json(error);
+  }
+});
 
 
 
