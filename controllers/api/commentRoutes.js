@@ -3,23 +3,6 @@ const { Tile, User, Comment, Tracker } = require('../../models');
 const { withAuth } = require('../../utils/auth');
 
 // The `/api/comments` endpoint
-
-
-// ------------------------------------------------------------------
-// FOR TESTING IN INSOMNIA
-
-
-// GET all comments 
-router.get('/', async (req, res) => {
-    const commentData = await Comment.findAll({
-      include: [{ model: User }],
-    });
-    res.status(200).json(commentData);
-});
- 
-
-  
-// ------------------------------------------------------------------
  
 
 // CREATE a comment 

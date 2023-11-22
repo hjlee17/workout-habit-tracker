@@ -4,35 +4,6 @@ const { withAuth } = require('../../utils/auth');
 
 // The `/api/tiles` endpoint
 
-
-// ------------------------------------------------------------------
-// FOR TESTING IN INSOMNIA
-
-
-// GET all tiles 
-router.get('/', async (req, res) => {
-    const tileData = await Tile.findAll({
-      include: [{ model: User }],
-    });
-    res.status(200).json(tileData);
-  });
-  
-
-
-
-  
-  // DELETE a tile 
-  router.delete('/:id', async (req, res) => {
-    const deletedtile = await Tile.destroy({
-      where: {
-        id: req.params.id,
-      },
-    });
-    res.json(deletedtile);
-  });
-  
-  
-// ------------------------------------------------------------------
  
 // GET one tile, with associated user and comment data
 router.get('/:id', async (req, res) => {

@@ -5,24 +5,6 @@ const { withAuth } = require('../../utils/auth');
 // The `/api/trackers` endpoint
 
 
-// ------------------------------------------------------------------
-// FOR TESTING IN INSOMNIA
-
-
-// GET all trackers 
-router.get('/', async (req, res) => {
-    const trackerData = await Tracker.findAll({
-      include: [{ model: Tile }],
-    });
-    res.status(200).json(trackerData);
-});
-
-
-
-
-// ------------------------------------------------------------------
-
-
 // CREATE new tracker
 router.post('/create', withAuth, async (req, res) => {
   const newTracker = await Tracker.create(req.body);
