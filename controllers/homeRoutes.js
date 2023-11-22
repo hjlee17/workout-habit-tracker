@@ -3,13 +3,6 @@ const { User, Tile, Comment, Tracker } = require('../models');
 const { withAuth } = require('../utils/auth');
 
 
-// ------------------------------------------------------------------------------------------
-// test route for development
-router.get('/test', async (req, res) => {
-  res.render('test');
-});
-// ------------------------------------------------------------------------------------------
-
 // GET all users to render to homepage
 router.get('/', withAuth, async (req, res) => {
   try {
@@ -265,10 +258,6 @@ router.get('/tiles/delete/:id', withAuth, async (req, res) => {
       }
  
       const tile = tileData.get({ plain: true });
-
-      // compare the req.session.user_id and the user_id (part of the Tile model)
-      // and then if they DONT match, stop the code and redirect
-      // res.render('test');
 
       // check logged in user and owner of post
       if (req.session.user_id !== tile.user_id) {

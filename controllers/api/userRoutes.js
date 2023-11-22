@@ -5,7 +5,7 @@ const { Tile } = require('../../models');
 // The `/api/users` endpoint
 
 
-// create a new user -- DEVELOPED BY BECCA
+// create a new user
 router.post('/', async (req, res) => {
   try {
     const newUser = await User.create(req.body);
