@@ -83,7 +83,7 @@ This Node Express application uses the following packages:
   - [LoadingBar.js](https://loading.io/progress/)  
   
 The `colors` package was used to modify console.logs for development.  
-The application uses `dotenv`` to for environment variable management.  
+The application uses `dotenv` for environment variable management.  
 The `Sequelize` package is used to store the database.  
 The `bcrypt` package handles hashing passwords stored in the User model.  
 The application utilizes `connect-session-sequelize` and `express-sessions` to store sessions to the database.  
@@ -95,7 +95,6 @@ On the client-side, the application utilizes Loading Bar, a Flexible JavaScript 
 There are several possibilities for future development.  The following highlights some of the anticipated future developments: 
 
 ### Phase 1: Additional User-Error Handling and Editing Functionality
-Enhancements in this phase include:
 
 - **Comment Management:** Users can delete or edit comments they've authored or delete those associated with a tile they created.
 - **Tile Editing:** Users can modify any aspect of their tile, such as the description, title, or deducting from the current total.
@@ -118,8 +117,8 @@ Enhancements in this phase include:
 
 ### Phase 5: Overall Tile Complexity and Tracker Customization
 - **Multiple Trackers:** Each tile is associated with only one tracker. Development can allow for users to associate multiple trackers with a single tile, allowing them to set more complex goals. 
-- **Shared Tiles:** Each tile is associated with a single user. Development is needed for introducing shared tiles to enabling collaborative or competitive efforts .
- **Tracker Customization:** The tracker itself appears the same throughout the application. LoadingBar.js offers robust customizable options.  Development is needed for the application to incorporate more of the features of LoadingBar.js or an alternative package to give users the ability to personalize the appearance and features of the tracker.
+- **Shared Tiles:** Each tile is associated with a single user. Development is needed for introducing shared tiles to enabling collaborative or competitive efforts.
+- **Tracker Customization:** The tracker itself appears the same throughout the application. LoadingBar.js offers robust customizable options.  Development is needed for the application to incorporate more of the features of LoadingBar.js or an alternative package to give users the ability to personalize the appearance and features of the tracker.
 
 
 ### Phase 6, Third-Party Application
