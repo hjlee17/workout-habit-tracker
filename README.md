@@ -71,24 +71,24 @@ They must be logged in to create tiles, view other users' tiles, and view/add co
 
 ## Technologies Used
 This Node Express application uses the following packages:
-   - [bcrypt v.5.1.1](https://www.npmjs.com/package/bcrypt/v/5.1.1)
-   - [colors v.1.4.0](https://www.npmjs.com/package/colors/v/1.4.0)
-   - [connect-session-sequelize v.7.1.7](https://www.npmjs.com/package/connect-session-sequelize/v/7.1.7)
-   - [dotenv v.16.3.1](https://www.npmjs.com/package/dotenv/v/16.3.1)
-   - [express v.4.18.2](https://www.npmjs.com/package/express/v/4.18.2)
-   - [express-handlebars v.7.1.2](https://www.npmjs.com/package/express-handlebars/v/7.1.2)
-   - [express-session v.1.17.3](https://www.npmjs.com/package/express-session/v/1.17.3)
-   - [mysql2 v.3.6.3](https://www.npmjs.com/package/mysql2/v/3.6.3)
-   - [sequelize v.6.35.0](https://www.npmjs.com/package/sequelize/v/6.35.0)
-   - [LoadingBar.js](https://loading.io/progress/)
-
-- The colors package was used to modify console.logs for development.
-- The application uses dotenv to for environment variable management.
-- The Sequelize package is used to store the database.
-- The bcrypt package handles hashing passwords stored in the User model.
-- The application utilizes connect-session-sequelize and express-sessions to store sessions to the database.
-- Express-handlebars is the view engine for rendering handlebars templates.
-- On the client-side, the application utilizes Loading Bar, a Flexible JavaScript Progress Bar Library.
+  - [bcrypt v.5.1.1](https://www.npmjs.com/package/bcrypt/v/5.1.1)
+  - [colors v.1.4.0](https://www.npmjs.com/package/colors/v/1.4.0)
+  - [connect-session-sequelize v.7.1.7](https://www.npmjs.com/package/connect-session-sequelize/v/7.1.7)
+  - [dotenv v.16.3.1](https://www.npmjs.com/package/dotenv/v/16.3.1)
+  - [express v.4.18.2](https://www.npmjs.com/package/express/v/4.18.2)
+  - [express-handlebars v.7.1.2](https://www.npmjs.com/package/express-handlebars/v/7.1.2)
+  - [express-session v.1.17.3](https://www.npmjs.com/package/express-session/v/1.17.3)
+  - [mysql2 v.3.6.3](https://www.npmjs.com/package/mysql2/v/3.6.3)
+  - [sequelize v.6.35.0](https://www.npmjs.com/package/sequelize/v/6.35.0)
+  - [LoadingBar.js](https://loading.io/progress/)  
+  
+The `colors` package was used to modify console.logs for development.  
+The application uses `dotenv`` to for environment variable management.  
+The `Sequelize` package is used to store the database.  
+The `bcrypt` package handles hashing passwords stored in the User model.  
+The application utilizes `connect-session-sequelize` and `express-sessions` to store sessions to the database.  
+`Express-handlebars` is the view engine for rendering handlebars templates.  
+On the client-side, the application utilizes Loading Bar, a Flexible JavaScript Progress Bar Library.
 
 
 ## Future Development  
@@ -116,13 +116,13 @@ Enhancements in this phase include:
 - **User Profile Pictures:** User profiles on the public page ideally incorporate view profile pictures, which should also be incorporated throughout other pages in the application.
 
 
-## Phase 5: Overall Tile Complexity and Tracker Customization
+### Phase 5: Overall Tile Complexity and Tracker Customization
 - **Multiple Trackers:** Each tile is associated with only one tracker. Development can allow for users to associate multiple trackers with a single tile, allowing them to set more complex goals. 
 - **Shared Tiles:** Each tile is associated with a single user. Development is needed for introducing shared tiles to enabling collaborative or competitive efforts .
  **Tracker Customization:** The tracker itself appears the same throughout the application. LoadingBar.js offers robust customizable options.  Development is needed for the application to incorporate more of the features of LoadingBar.js or an alternative package to give users the ability to personalize the appearance and features of the tracker.
 
 
-## Phase 6, Third-Party Application
+### Phase 6, Third-Party Application
 - **Fitness Data Integration:** Development is needed to integrate this application with external fitness tracking applications, allowing users the option for automatic tracker updates.
 
 
