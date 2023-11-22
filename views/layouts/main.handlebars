@@ -15,7 +15,7 @@
         <div class="header">
         <div class="navbar">
             <!-- conditionally render login or logout links -->
-            <a href="/">Home</a>
+            <a href="/">Public</a>
             <a href="/dashboard">Dashboard</a>
             {{#if logged_in}}
             <button id="logout">Logout</button>
@@ -26,9 +26,6 @@
         <h1 class="title">Workout Trackers</h1>
     </div>
     
-    </div>
-    
-
     <div class="main">
         <main>
         <!-- render the layout -->
@@ -45,6 +42,7 @@
     <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
     <script src="/js/becca-logout.js"></script>
     {{/if}}
+
 </body>
 
 </html>
