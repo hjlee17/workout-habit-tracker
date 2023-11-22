@@ -168,7 +168,6 @@ router.get('/tiles/:id', withAuth, async (req, res) => {
 
   try{ 
       const [tileData, commentData] = await Promise.all([
-          
           Tile.findByPk(req.params.id, {
               include: [
                 {
@@ -176,8 +175,12 @@ router.get('/tiles/:id', withAuth, async (req, res) => {
                     attributes: ['first_name'],
                 },
                 {
-                  model: Comment
-                }
+                    model: Comment
+                },
+                {
+                    model: Tracker,
+                    attributes: ['id', 'tracker_goal', 'current_tracker_status', 'percentage', 'tile_id' ],
+                },
               ],
           }),
 
@@ -218,8 +221,7 @@ router.get('/tiles/:id', withAuth, async (req, res) => {
           return oneComment;
       });
       console.log('comments:', comments)
-      
-  
+
       res.render('test-becca-single-tile', { 
           tile, // user_logged_in flag attached to post (for use in post partial) 
           comments, // user_logged_in flag attached to comments (for use in comment partial) 
@@ -287,8 +289,6 @@ router.get('/tiles/delete/:id', withAuth, async (req, res) => {
         console.log(error);
   };     
 });
-
-
 
 
 
